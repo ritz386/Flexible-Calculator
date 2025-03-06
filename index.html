@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Excel-like Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .calculator {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #808080;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #666666;
+        }
+        .variable-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .variable-input {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-size: 0.8em;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body onload="calculate()">
+
+    <div class="calculator"> 
+
+<img src="title.jpg" alt="Math Tool Box">
+
+ <b>Calculator (MS Excel syntax)</b>:<br><small>write expressions <b>directly</b> or <b>in terms of variables</b></small>
+        <div class="variable-inputs">
+            <div class="variable-input">
+                <label for="x">x:</label>
+                <input type="number" id="x" placeholder="x" value="1" oninput="calculate()">
+            </div>
+            <div class="variable-input">
+                <label for="y">y:</label>
+                <input type="number" id="y" placeholder="y" value="1" oninput="calculate()">
+            </div>
+            <div class="variable-input">
+                <label for="z">z:</label>
+                <input type="number" id="z" placeholder="z" value="1" oninput="calculate()">
+            </div>
+            <div class="variable-input">
+                <label for="p">p:</label>
+                <input type="number" id="p" placeholder="p" value="1" oninput="calculate()">
+            </div>
+            <div class="variable-input">
+                <label for="q">q:</label>
+                <input type="number" id="q" placeholder="q" value="1" oninput="calculate()">
+            </div>
+            <div class="variable-input">
+                <label for="r">r:</label>
+                <input type="number" id="r" placeholder="r" value="1" oninput="calculate()">
+            </div>
+        </div>
+        <br>
+        
+        <font color=”#808080″>
+        <b>Calculator 1 (type expression)</b>
+        <input type="text" id="input1" placeholder="Write your calculations like in MS Excel" value="x^2 + y^2 + 2*x*y + e^p +log(10*x) + sin(60)" oninput="calculate()">
+        <small>natural log: ln(), log base 10: log(), angles in deg</small>
+        <br> <b>Result 1</b>
+        <input type="text" id="output1" placeholder="Answer 1" readonly>
+        </font>
+
+        <br><br>
+        
+        <font color=”#0000FF″>
+        <b>Calculator 2 (type expression)</b>
+        <input type="text" id="input2" placeholder="Write your calculations like in MS Excel" value="x + y + z + p + q + r" oninput="calculate()">
+        <small>natural log: ln(), log base 10: log(), angles in deg</small>
+        <br> <b>Result 2</b>
+        <input type="text" id="output2" placeholder="Answer 2" readonly>
+        </font>
+        <small>created by Rituraj Borah</small>
+    </div>
+
+    <script>
+        function degreesToRadians(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+
+        function sin(degrees) {
+            return Math.sin(degreesToRadians(degrees));
+        }
+
+        function cos(degrees) {
+            return Math.cos(degreesToRadians(degrees));
+        }
+
+        function tan(degrees) {
+            return Math.tan(degreesToRadians(degrees));
+        }
+
+        function cosec(degrees) {
+            return 1 / Math.sin(degreesToRadians(degrees));
+        }
+
+        function sec(degrees) {
+            return 1 / Math.cos(degreesToRadians(degrees));
+        }
+
+        function cot(degrees) {
+            return 1 / Math.tan(degreesToRadians(degrees));
+        }
+
+        function calculate() {
+            const input1 = document.getElementById('input1').value;
+            const input2 = document.getElementById('input2').value;
+            const output1 = document.getElementById('output1');
+            const output2 = document.getElementById('output2');
+
+            // Get values of variables
+            const x = parseFloat(document.getElementById('x').value) || 0;
+            const y = parseFloat(document.getElementById('y').value) || 0;
+            const z = parseFloat(document.getElementById('z').value) || 0;
+            const p = parseFloat(document.getElementById('p').value) || 0;
+            const q = parseFloat(document.getElementById('q').value) || 0;
+            const r = parseFloat(document.getElementById('r').value) || 0;
+
+            try {
+                // Convert Excel-like syntax to JavaScript for the first input
+                let jsExpression1 = input1
+                    .replace(/\^/g, '**')  // Convert ^ to **
+                    .replace(/([0-9.]+)e([+-]?[0-9]+)/gi, '$1*10**$2')  // Convert scientific notation
+                    .replace(/log\(/g, 'Math.log10(')  // Interpret log() as base-10 log
+                    .replace(/ln\(/g, 'Math.log(')  // Interpret ln() as natural log (base e)
+                    .replace(/exp\(/g, 'Math.exp(')  // Convert exp()
+                    .replace(/e(?![+\-\d])/g, 'Math.E')  // Convert e to Math.E
+                    .replace(/sin\(/g, 'sin(')
+                    .replace(/cos\(/g, 'cos(')
+                    .replace(/tan\(/g, 'tan(')
+                    .replace(/cosec\(/g, 'cosec(')
+                    .replace(/sec\(/g, 'sec(')
+                    .replace(/cot\(/g, 'cot(');
+
+                // Convert Excel-like syntax to JavaScript for the second input
+                let jsExpression2 = input2
+                    .replace(/\^/g, '**')  // Convert ^ to **
+                    .replace(/([0-9.]+)e([+-]?[0-9]+)/gi, '$1*10**$2')  // Convert scientific notation
+                    .replace(/log\(/g, 'Math.log10(')  // Interpret log() as base-10 log
+                    .replace(/ln\(/g, 'Math.log(')  // Interpret ln() as natural log (base e)
+                    .replace(/exp\(/g, 'Math.exp(')  // Convert exp()
+                    .replace(/e(?![+\-\d])/g, 'Math.E')  // Convert e to Math.E
+                    .replace(/sin\(/g, 'sin(')
+                    .replace(/cos\(/g, 'cos(')
+                    .replace(/tan\(/g, 'tan(')
+                    .replace(/cosec\(/g, 'cosec(')
+                    .replace(/sec\(/g, 'sec(')
+                    .replace(/cot\(/g, 'cot(');
+
+                // Evaluate the expressions
+                const result1 = eval(jsExpression1);
+                const result2 = eval(jsExpression2);
+
+                // Display the results in their respective output fields
+                output1.value = result1;
+                output2.value = result2;
+            } catch (error) {
+                output1.value = 'Error: Invalid expression';
+                output2.value = 'Error: Invalid expression';
+            }
+        }
+    </script>
+</body>
+</html>
