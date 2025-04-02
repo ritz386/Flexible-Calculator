@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Mathematical Calculator with Ten Variables</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,7 +59,7 @@
         #addCalculatorBtn {
             margin: 2px 0;
             padding: 8px 16px;
-            background-color: #4CAF50;
+            background-color: #45a049;
             color: white;
             border: none;
             border-radius: 4px;
@@ -77,7 +81,7 @@
             overflow: auto;
         }
         #unitConverterContent {
-            background-color: #f5f5f5;
+            background-color: #FFFFFF;
             margin: 10px auto;
             padding: 10px;
             border-radius: 8px;
@@ -89,7 +93,7 @@
             position: absolute;
             top: 2px;
             right: 5px;
-            background: #ff4444;
+            background: #000000;
             color: white;
             border: none;
             border-radius: 100%;
@@ -108,7 +112,7 @@
         }
         .converter-section h2 {
             margin-top: 0;
-            color: #3498db;
+            color: #000000;
             font-size: 1.5em;
             border-bottom: 1px solid #ddd;
             padding-bottom: 2px;
@@ -141,7 +145,7 @@
         }
         .input-group button {
             padding: 6px 12px;
-            background-color: #3498db;
+            background-color: #000000;
             color: white;
             border: none;
             border-radius: 4px;
@@ -165,8 +169,10 @@
 <br>
     <font size="3"><i>for scientific, engineering, and day-to-day calculations </i> <font size="5"><b>&#9881</b></font><font size="5"><b>&#9787</b></font><font size="5"><b>&#9786</b></font></font><br>
 
-<br> <font size="2" color="#0000FF"><font size="5"><b>&#9787</b></font>Example equations: <b>PV = nRT</b> (ideal gas law), <b>Net present value = Rt/(1+i)^t</b>, etc.</font>
-    <br> <font size="2" color="#0000FF"> List of equations: chemistry, physics, statistics, engineering, economics. (to be updated) </font>
+    <button id="installApp" style="display: none;">Install App</button>
+    
+<br> <font size="2">Example equations: <i><b>PV = nRT</b></i> (ideal gas law), <i><b>Net present value = Rt/(1+i)^t</b></i>, etc.</font>
+   
     <br>
  
    
@@ -180,10 +186,9 @@
                  <input type="text" placeholder="Notes (e.g. P means pressure)">
             </div>         
             <input type="text" id="inputField1" placeholder="a function (e.g. n*R*T/V)" style="height: 30px;"> 
-            <font color="#800080" size="2">syntax: for log use <b>logx(y)</b> where x is the base, <b>pi</b> returns the 
-value of pi, <b>e</b> returns the value of exponential<br> <b>sin-1(x)</b> returns sin inverse of x, <b>provide angles in degrees in trigonometric calculations</b></font>
+            <font color="#808080" size="2">syntax: for log use <b>logx(y)</b> where x is the base, <b>pi = 3.14159</b>, <b>e = 2.718</b><br> <b>sin-1(x)</b> returns sin inverse of x, <b>angles in degrees in trigonometric calculations</b></font>
             <br>
-            <label for="outputField1"><font size="2" color="#FF0000"><b>Result:</b></font></label>
+            <label for="outputField1"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
             <output id="outputField1">0</output>   
         </div>
 
@@ -196,19 +201,19 @@ value of pi, <b>e</b> returns the value of exponential<br> <b>sin-1(x)</b> retur
 
             </div>
             <input type="text" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px;">
-            <label for="outputField2"><font size="3" color="#FF0000"><b>Result:</b></font></label>
+            <label for="outputField2"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
             <output id="outputField2">0</output>
         </div>
     </div>
 
     <!-- Add Calculator Button -->
     <button id="addCalculatorBtn">Add More Calculators Above</button>
-
+<br> <font size="2"> List of equations: chemistry, physics, statistics, engineering, economics. (to be updated) </font>
  <br>
 
  <font size="2"><b><i>Enter variable names and values with <u><font color="#FF0000">consistent units</font></u></i></b></font>
     <button onclick="showUnitConverter()" style="margin-left:10px; padding:5px 10px; background:#3498db; color:white; border:none; border-radius:4px; cursor:pointer;">Click for unit converter</button>
-
+ 
 
     <!-- Variable Input Fields -->
     <div class="variable-input">
@@ -695,7 +700,7 @@ Excel like calculator
                         <input type="text" placeholder="Notes">
                     </div>
                     <input type="text" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px;">
-                    <label for="outputField${newCalculatorId}"><font size="2" color="#FF0000"><b>Result:</b></font></label>
+                    <label for="outputField${newCalculatorId}"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
                     <output id="outputField${newCalculatorId}">0</output>
                 </div>
             `;
@@ -1193,5 +1198,33 @@ Excel like calculator
 
 
     </script>
+
+<script>
+let deferredPrompt;
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById("installApp").style.display = "block";
+    
+    document.getElementById("installApp").addEventListener("click", () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+                console.log("App Installed");
+            }
+            deferredPrompt = null;
+        });
+    });
+});
+</script>
+    <script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").then(() => {
+        console.log("Service Worker Registered!");
+    });
+}
+</script>
+
+    
 </body>
 </html>
