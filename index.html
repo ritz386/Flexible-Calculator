@@ -186,6 +186,7 @@
             font-size: 14px;
             padding: 2px 5px;
             margin-left: 2px;
+            min-width: 30px;
         }
         .lock-btn.locked {
             color: #e74c3c;
@@ -855,18 +856,25 @@ Excel like calculator
         // Track locked inputs
         const lockedInputs = new Set();
 
-        // Function to add lock button to an input element
-        function addLockButton(inputElement) {
-            // Check if lock button already exists
-            if (document.querySelector(`button[data-target="${inputElement.id}"]`)) {
-                return;
+        // Function to initialize lock button for a specific input
+        function initLockButton(inputId) {
+            const input = document.getElementById(inputId);
+            const lockBtn = document.querySelector(`.lock-btn[data-target="${inputId}"]`);
+            
+            if (!input || !lockBtn) return;
+            
+            // Check if already locked from saved state
+            if (lockedInputs.has(inputId)) {
+                lockBtn.textContent = '🔒';
+                lockBtn.classList.add('locked');
+                input.classList.add('locked-input');
+                input.disabled = true;
+                if (inputId === 'notesField') {
+                    input.contentEditable = 'false';
+                }
             }
             
-            const lockBtn = document.createElement('button');
-            lockBtn.className = 'lock-btn';
-            lockBtn.textContent = '🔓';
-            lockBtn.dataset.target = inputElement.id;
-            
+            // Add click event listener
             lockBtn.addEventListener('click', function() {
                 const targetId = this.dataset.target;
                 const targetInput = document.getElementById(targetId);
@@ -896,42 +904,26 @@ Excel like calculator
                 // Save state
                 saveCurrentState();
             });
-            
-            // Insert lock button after input
-            inputElement.parentNode.insertBefore(lockBtn, inputElement.nextSibling);
         }
 
-        // Initialize lock buttons
+        // Initialize all lock buttons
         function initializeLockButtons() {
-            // Add lock buttons to all calculator inputs
+            // Initialize calculator lock buttons
             for (let i = 1; i <= calculatorCount; i++) {
-                const inputs = [
-                    document.getElementById(`inputField${i}`),
-                    document.getElementById(`resultField${i}`),
-                    document.getElementById(`notesField${i}`)
-                ];
-                inputs.forEach(input => {
-                    if (input) addLockButton(input);
-                });
+                initLockButton(`inputField${i}`);
+                initLockButton(`resultField${i}`);
+                initLockButton(`notesField${i}`);
             }
             
-            // Add lock buttons to variable inputs
+            // Initialize variable lock buttons
             for (let i = 1; i <= 10; i++) {
-                const inputs = [
-                    document.getElementById(`variableName${i}`),
-                    document.getElementById(`variableValue${i}`),
-                    document.getElementById(`unit${i}`)
-                ];
-                inputs.forEach(input => {
-                    if (input) addLockButton(input);
-                });
+                initLockButton(`variableName${i}`);
+                initLockButton(`variableValue${i}`);
+                initLockButton(`unit${i}`);
             }
             
-            // Add lock button to notes field
-            const notesField = document.getElementById('notesField');
-            if (notesField) {
-                addLockButton(notesField);
-            }
+            // Initialize notes field lock button
+            initLockButton('notesField');
         }
 
         // Function to create a new calculator with lock buttons
@@ -971,11 +963,12 @@ Excel like calculator
             const inputField = document.getElementById(`inputField${newCalculatorId}`);
             const outputField = document.getElementById(`outputField${newCalculatorId}`);
             const resultField = document.getElementById(`resultField${newCalculatorId}`);
+            const notesField = document.getElementById(`notesField${newCalculatorId}`);
             
-            // Add lock buttons
-            addLockButton(inputField);
-            addLockButton(resultField);
-            addLockButton(document.getElementById(`notesField${newCalculatorId}`));
+            // Initialize lock buttons for the new calculator
+            initLockButton(`inputField${newCalculatorId}`);
+            initLockButton(`resultField${newCalculatorId}`);
+            initLockButton(`notesField${newCalculatorId}`);
             
             // Add event listeners to the new calculator
             inputField.addEventListener('input', function() {
@@ -990,7 +983,6 @@ Excel like calculator
             });
             
             // Add input listener to notes field
-            const notesField = document.getElementById(`notesField${newCalculatorId}`);
             if (notesField) {
                 notesField.addEventListener('input', saveCurrentState);
             }
@@ -1187,17 +1179,6 @@ Excel like calculator
                 if (state.lockedInputs) {
                     state.lockedInputs.forEach(id => {
                         lockedInputs.add(id);
-                        const input = document.getElementById(id);
-                        const lockBtn = document.querySelector(`button[data-target="${id}"]`);
-                        if (input && lockBtn) {
-                            lockBtn.textContent = '🔒';
-                            lockBtn.classList.add('locked');
-                            input.classList.add('locked-input');
-                            input.disabled = true;
-                            if (id === 'notesField') {
-                                input.contentEditable = 'false';
-                            }
-                        }
                     });
                 }
                 
@@ -1411,6 +1392,10 @@ Excel like calculator
                 expression = replaceInverseTrigFunctions(expression);
                 // Replace factorial syntax (x!) with the factorial function call
                 expression = replaceFactorialSyntax(expression);
+                
+                // DEBUG: Log the expression before evaluation
+                console.log("Evaluating expression:", expression);
+                
                 // Evaluate the mathematical expression
                 const result = eval(expression);
                 // Update the output field with the result
@@ -1421,6 +1406,7 @@ Excel like calculator
             } catch (error) {
                 // If there's an error (e.g., invalid input), display an error message
                 outputField.textContent = 'Invalid Expression';
+                console.error("Evaluation error:", error, "Expression:", expression);
             }
         }
 
@@ -1693,6 +1679,9 @@ Excel like calculator
                     setTimeout(saveCurrentState, 100);
                 }
             });
+            
+            // Initial evaluation
+            evaluateAllCalculators();
         });
 
     </script>
