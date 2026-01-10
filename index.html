@@ -41,6 +41,7 @@
             display: flex;
             gap: 3px;
             margin-bottom: 1px;
+            align-items: center;
         }
         .variable-input input {
             width: 80px;
@@ -58,11 +59,6 @@
             height: 20px;
             font-size: 12px;
         }
-
-/* Reduced width for Notes input fields by 40% */
-        .expression-container input[type="text"]:not(.result-input) {
-            width: 180px; /* Reduced from approximately 300px by 40% */
-        
         #addCalculatorBtn {
             margin: 2px 0;
             padding: 8px 16px;
@@ -74,6 +70,22 @@
         }
         #addCalculatorBtn:hover {
             background-color: #45a049;
+        }
+        #downloadApp {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            padding: 10px 20px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        #downloadApp:hover {
+            background: #34495e;
         }
          /* Unit Converter Modal Styles */
         #unitConverterModal {
@@ -134,7 +146,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-
         }
         .input-group input[type="number"] {
             padding: 6px;
@@ -167,56 +178,45 @@
             color: #2c3e50;
             margin-left: 11px;
              font-size: 1.5em;
-
         }
-        /* New Constants Popup Styles */
-        #constantsPopup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1001;
-            overflow: auto;
-        }
-        #constantsContent {
-            background-color: #FFFFFF;
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        #closeConstantsPopup {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            background: #000000;
-            color: white;
+        .lock-btn {
+            background: none;
             border: none;
-            border-radius: 100%;
-            width: 30px;
-            height: 30px;
-            font-weight: bold;
             cursor: pointer;
+            font-size: 14px;
+            padding: 2px 5px;
+            margin-left: 2px;
+        }
+        .lock-btn.locked {
+            color: #e74c3c;
+        }
+        .input-with-lock {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .locked-input {
+            background-color: #f5f5f5 !important;
+            border-color: #95a5a6 !important;
+            color: #7f8c8d !important;
+        }
+        .input-lock-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
     </style>
 </head>
 <body>
+    <button id="downloadApp">📥 Download Offline App</button>
+    
     <img src="title.jpg" alt="Math Tool Box">
 <br>
     <font size="3"><i>for scientific, engineering, and day-to-day calculations </i> <font size="5"><b>&#9881</b></font><font size="5"><b>&#9787</b></font><font size="5"><b>&#9786</b></font></font><br>
 
     <button id="installApp" style="display: none;">Install App</button>
     
-<br>
-<button onclick="showConstantsPopup()" style="margin: 5px 0; padding:5px 10px; background:#3498db; color:white; border:none; border-radius:4px; cursor:pointer;">Show Constants & Equations</button>
-
+<br> <font size="2">Example equations: <i><b>PV = nRT</b></i> (ideal gas law), <i><b>Net present value = Rt/(1+i)^t</b></i>, etc.</font>
    
     <br>
  
@@ -227,10 +227,19 @@
         <div class="calculation-group">
             <div class="expression-container">
                 <label for="inputField1"><font size="3"><b><i>Calculator:</i></b></font></label>
-                <input type="text" class="result-input" id="resultField1" placeholder="variable name (e.g. P)">
-                 <input type="text" placeholder="Notes (e.g. P means pressure)">
+                <div class="input-lock-wrapper">
+                    <input type="text" class="result-input" id="resultField1" placeholder="variable name (e.g. P)">
+                    <button class="lock-btn" data-target="resultField1">🔓</button>
+                </div>
+                <div class="input-lock-wrapper">
+                    <input type="text" placeholder="Notes (e.g. P means pressure)" id="notesField1">
+                    <button class="lock-btn" data-target="notesField1">🔓</button>
+                </div>
             </div>         
-            <input type="text" id="inputField1" placeholder="a function (e.g. n*R*T/V)" style="height: 30px;"> 
+            <div class="input-with-lock">
+                <input type="text" id="inputField1" placeholder="a function (e.g. n*R*T/V)" style="height: 30px;">
+                <button class="lock-btn" data-target="inputField1">🔓</button>
+            </div>
             <font color="#808080" size="2">syntax: for log use <b>logx(y)</b> where x is the base, <b>pi = 3.14159</b>, <b>e = 2.718</b><br> <b>sin-1(x)</b> returns sin inverse of x, <b>angles in degrees in trigonometric calculations</b></font>
             <br>
             <label for="outputField1"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
@@ -241,11 +250,19 @@
         <div class="calculation-group">
             <div class="expression-container">
                 <label for="inputField2"><font size="3"><b><i>Calculator:</i></b></font></label>
-                <input type="text" class="result-input" id="resultField2" placeholder="variable name">
-                <input type="text" placeholder="Notes">
-
+                <div class="input-lock-wrapper">
+                    <input type="text" class="result-input" id="resultField2" placeholder="variable name">
+                    <button class="lock-btn" data-target="resultField2">🔓</button>
+                </div>
+                <div class="input-lock-wrapper">
+                    <input type="text" placeholder="Notes" id="notesField2">
+                    <button class="lock-btn" data-target="notesField2">🔓</button>
+                </div>
             </div>
-            <input type="text" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px;">
+            <div class="input-with-lock">
+                <input type="text" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px;">
+                <button class="lock-btn" data-target="inputField2">🔓</button>
+            </div>
             <label for="outputField2"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
             <output id="outputField2">0</output>
         </div>
@@ -262,69 +279,201 @@
 
     <!-- Variable Input Fields -->
     <div class="variable-input">
-        <input type="text" id="variableName1" placeholder="V"><font size="4">:</font>
-        <input type="text" id="variableValue1" placeholder="value (e.g., 10)">
-        <input type="text" id="unit" placeholder="unit">        
-       
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName1" placeholder="V">
+            <button class="lock-btn" data-target="variableName1">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue1" placeholder="value (e.g., 10)">
+            <button class="lock-btn" data-target="variableValue1">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit1" placeholder="unit">
+            <button class="lock-btn" data-target="unit1">🔓</button>
+        </div>
+        <font color="#0000A0">The 7 SI units: Second (s, time), metre (m, length), kilogram (kg, mass),<br>
+            ampere (A, electric current), kelvin (K, thermodynamic temperature),<br> 
+            mole (mol, amount of substance), and candela (cd, luminous intensity).</font>
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName2" placeholder="n"><font size="4">:</font>
-        <input type="text" id="variableValue2" placeholder="value (e.g., 2)">
-        <input type="text" id="unit" placeholder="unit">
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName2" placeholder="n">
+            <button class="lock-btn" data-target="variableName2">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue2" placeholder="value (e.g., 2)">
+            <button class="lock-btn" data-target="variableValue2">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit2" placeholder="unit">
+            <button class="lock-btn" data-target="unit2">🔓</button>
+        </div>
+        1 mile = 1760 yards (1.6093 km) <br>
+        1 yard = 3 feet <br>
+        1 furlong = 220 yard (201.168 meter)
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName3" placeholder="R"><font size="4">:</font>
-        <input type="text" id="variableValue3" placeholder="value (e.g., 8.314)">
-        <input type="text" id="unit" placeholder="unit">
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName3" placeholder="R">
+            <button class="lock-btn" data-target="variableName3">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue3" placeholder="value (e.g., 8.314)">
+            <button class="lock-btn" data-target="variableValue3">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit3" placeholder="unit">
+            <button class="lock-btn" data-target="unit3">🔓</button>
+        </div>
+        1 foot (feet) = 12 inch <br>
+        1 inch = 2.54 cm <br>
+        1 foot (feet) = 30.48 cm
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName4" placeholder="T"><font size="4">:</font>
-        <input type="text" id="variableValue4" placeholder="value (e.g., 300)">
-        <input type="text" id="unit" placeholder="unit">
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName4" placeholder="T">
+            <button class="lock-btn" data-target="variableName4">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue4" placeholder="value (e.g., 300)">
+            <button class="lock-btn" data-target="variableValue4">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit4" placeholder="unit">
+            <button class="lock-btn" data-target="unit4">🔓</button>
+        </div>
+        1 hector = 10000 m2 = 107639.147 sqft <br>
+        1 m2 = 10,7639 sqft. <br>
+        1 hector = 2.471 acre, 1 acre = 43,560 sqft
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName5" placeholder=""><font size="4">:</font>
-        <input type="text" id="variableValue5" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName5" placeholder="">
+            <button class="lock-btn" data-target="variableName5">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue5" placeholder="">
+            <button class="lock-btn" data-target="variableValue5">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit5" placeholder="">
+            <button class="lock-btn" data-target="unit5">🔓</button>
+        </div>
+        1 metric ton = 1000 kg <br>
+        1 ton (US) = 2000 pound (907.18 kg) <br>
+        1 pound = 16 ounce
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName6" placeholder=""><font size="4">:</font>
-        <input type="text" id="variableValue6" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName6" placeholder="">
+            <button class="lock-btn" data-target="variableName6">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue6" placeholder="">
+            <button class="lock-btn" data-target="variableValue6">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit6" placeholder="">
+            <button class="lock-btn" data-target="unit6">🔓</button>
+        </div>
+        1 pound = 453.592 gm = 0.4536 kg <br>
+        1 ounce = 28.3495 gm <br>
+        1 kg = 2.2046 pound
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName7" placeholder=""><font size="4">:</font>
-        <input type="text" id="variableValue7" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName7" placeholder="">
+            <button class="lock-btn" data-target="variableName7">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue7" placeholder="">
+            <button class="lock-btn" data-target="variableValue7">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit7" placeholder="">
+            <button class="lock-btn" data-target="unit7">🔓</button>
+        </div>
+        1 decimeter = 10 centimeter<br>
+        1 decameter = 10 meter<br>
+        1 decigram = 0.1 gram
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName8" placeholder=""><font size="4">:</font>
-        <input type="text" id="variableValue8" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName8" placeholder="">
+            <button class="lock-btn" data-target="variableName8">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue8" placeholder="">
+            <button class="lock-btn" data-target="variableValue8">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit8" placeholder="">
+            <button class="lock-btn" data-target="unit8">🔓</button>
+        </div>
+        1 decagram = 10 gram <br>
+        1 deciliter = 100 milliliter <br>
+        1 decaliter = 10 liter
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName9" placeholder=""><font size="4">:</font>
-        <input type="text" id="variableValue9" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName9" placeholder="">
+            <button class="lock-btn" data-target="variableName9">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue9" placeholder="">
+            <button class="lock-btn" data-target="variableValue9">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit9" placeholder="">
+            <button class="lock-btn" data-target="unit9">🔓</button>
+        </div>
+        Avogadro's number (Na): 6.022*10^23 mol-1 <br>
+        Boltzmann constant (k): 1.380649*10^(-23) m2 kg s-2 K-1 <br>
+        Planck's constant (h):  6.62607015*10^(-34) m2 kg / s
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName10" placeholder=""><font size="4">:</font>
-        <input type="text" id="variableValue10" placeholder="">
-         <input type="text" id="unit" placeholder="">
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableName10" placeholder="">
+            <button class="lock-btn" data-target="variableName10">🔓</button>
+        </div>
+        <font size="4">:</font>
+        <div class="input-lock-wrapper">
+            <input type="text" id="variableValue10" placeholder="">
+            <button class="lock-btn" data-target="variableValue10">🔓</button>
+        </div>
+        <div class="input-lock-wrapper">
+            <input type="text" id="unit10" placeholder="">
+            <button class="lock-btn" data-target="unit10">🔓</button>
+        </div>
+        Elementary charge (c): 1.60217663*10^(-19) coulombs <br>
+        Faraday constant (F): 96 485.3321  sA / mol <br>
+        The gas constant (R): is 8.314 J / mol·K., to all constants (to be updated)
     </div>
 
     <!-- Notes Input Field -->
     <div class="calculation-group">
-        <label for="notesField">Notes:</label>
+        <div class="input-lock-wrapper">
+            <label for="notesField">Notes:</label>
+            <button class="lock-btn" data-target="notesField">🔓</button>
+        </div>
         <div id="notesField" class="notes-field" contenteditable="true" placeholder="Write your notes here..."></div>
 Advanced scientific calculator,
 All purpose scientific calculator,
@@ -698,44 +847,94 @@ Excel like calculator
         </div>
     </div>
 
-    <!-- New Constants Popup Window -->
-    <div id="constantsPopup">
-        <div id="constantsContent">
-            <button id="closeConstantsPopup" onclick="closeConstantsPopup()">×</button>
-            <font size="5"><b>Constants & Equations Reference</b></font>
-            <br>
-            <br>
-            <!-- You can add your text content here -->
-            <p>Add your constants and equations text here...</p>
-            <!-- Example content - you can replace this with your own text -->
-            <font size="3"><b>Common Physical Constants:</b></font><br>
-            <ul>
-                <li>Speed of light (c): 299,792,458 m/s</li>
-                <li>Gravitational constant (G): 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²</li>
-                <li>Planck constant (h): 6.62607015 × 10⁻³⁴ J·s</li>
-                <li>Boltzmann constant (k): 1.380649 × 10⁻²³ J/K</li>
-                <li>Avogadro constant (Nₐ): 6.02214076 × 10²³ mol⁻¹</li>
-                <li>Elementary charge (e): 1.602176634 × 10⁻¹⁹ C</li>
-                <li>Gas constant (R): 8.314462618 J/(mol·K)</li>
-            </ul>
-            
-            <font size="3"><b>Useful Equations:</b></font><br>
-            <ul>
-                <li>Newton's second law: F = ma</li>
-                <li>Kinetic energy: KE = ½mv²</li>
-                <li>Gravitational potential energy: PE = mgh</li>
-                <li>Ohm's law: V = IR</li>
-                <li>Einstein's mass-energy equivalence: E = mc²</li>
-            </ul>
-            <!-- End of example content -->
-        </div>
-    </div>
 
     <script>
         // Counter for additional calculators
         let calculatorCount = 2;
+        
+        // Track locked inputs
+        const lockedInputs = new Set();
 
-        // Function to create a new calculator
+        // Function to add lock button to an input element
+        function addLockButton(inputElement) {
+            // Check if lock button already exists
+            if (document.querySelector(`button[data-target="${inputElement.id}"]`)) {
+                return;
+            }
+            
+            const lockBtn = document.createElement('button');
+            lockBtn.className = 'lock-btn';
+            lockBtn.textContent = '🔓';
+            lockBtn.dataset.target = inputElement.id;
+            
+            lockBtn.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const targetInput = document.getElementById(targetId);
+                
+                if (lockedInputs.has(targetId)) {
+                    // Unlock
+                    lockedInputs.delete(targetId);
+                    this.textContent = '🔓';
+                    this.classList.remove('locked');
+                    targetInput.classList.remove('locked-input');
+                    targetInput.disabled = false;
+                    if (targetId === 'notesField') {
+                        targetInput.contentEditable = 'true';
+                    }
+                } else {
+                    // Lock
+                    lockedInputs.add(targetId);
+                    this.textContent = '🔒';
+                    this.classList.add('locked');
+                    targetInput.classList.add('locked-input');
+                    targetInput.disabled = true;
+                    if (targetId === 'notesField') {
+                        targetInput.contentEditable = 'false';
+                    }
+                }
+                
+                // Save state
+                saveCurrentState();
+            });
+            
+            // Insert lock button after input
+            inputElement.parentNode.insertBefore(lockBtn, inputElement.nextSibling);
+        }
+
+        // Initialize lock buttons
+        function initializeLockButtons() {
+            // Add lock buttons to all calculator inputs
+            for (let i = 1; i <= calculatorCount; i++) {
+                const inputs = [
+                    document.getElementById(`inputField${i}`),
+                    document.getElementById(`resultField${i}`),
+                    document.getElementById(`notesField${i}`)
+                ];
+                inputs.forEach(input => {
+                    if (input) addLockButton(input);
+                });
+            }
+            
+            // Add lock buttons to variable inputs
+            for (let i = 1; i <= 10; i++) {
+                const inputs = [
+                    document.getElementById(`variableName${i}`),
+                    document.getElementById(`variableValue${i}`),
+                    document.getElementById(`unit${i}`)
+                ];
+                inputs.forEach(input => {
+                    if (input) addLockButton(input);
+                });
+            }
+            
+            // Add lock button to notes field
+            const notesField = document.getElementById('notesField');
+            if (notesField) {
+                addLockButton(notesField);
+            }
+        }
+
+        // Function to create a new calculator with lock buttons
         function createCalculator() {
             calculatorCount++;
             const newCalculatorId = calculatorCount;
@@ -744,10 +943,19 @@ Excel like calculator
                 <div class="calculation-group">
                     <div class="expression-container">
                         <label for="inputField${newCalculatorId}"><font size="3"><b><i>Calculator:</i></b></font></label>
-                        <input type="text" class="result-input" id="resultField${newCalculatorId}" placeholder="Result variable name">
-                        <input type="text" placeholder="Notes">
+                        <div class="input-lock-wrapper">
+                            <input type="text" class="result-input" id="resultField${newCalculatorId}" placeholder="Result variable name">
+                            <button class="lock-btn" data-target="resultField${newCalculatorId}">🔓</button>
+                        </div>
+                        <div class="input-lock-wrapper">
+                            <input type="text" placeholder="Notes" id="notesField${newCalculatorId}">
+                            <button class="lock-btn" data-target="notesField${newCalculatorId}">🔓</button>
+                        </div>
                     </div>
-                    <input type="text" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px;">
+                    <div class="input-with-lock">
+                        <input type="text" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a)" style="height: 30px;">
+                        <button class="lock-btn" data-target="inputField${newCalculatorId}">🔓</button>
+                    </div>
                     <label for="outputField${newCalculatorId}"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
                     <output id="outputField${newCalculatorId}">0</output>
                 </div>
@@ -764,15 +972,28 @@ Excel like calculator
             const outputField = document.getElementById(`outputField${newCalculatorId}`);
             const resultField = document.getElementById(`resultField${newCalculatorId}`);
             
+            // Add lock buttons
+            addLockButton(inputField);
+            addLockButton(resultField);
+            addLockButton(document.getElementById(`notesField${newCalculatorId}`));
+            
             // Add event listeners to the new calculator
             inputField.addEventListener('input', function() {
                 evaluateExpression(inputField.value, outputField, resultField);
+                saveCurrentState();
             });
             
             resultField.addEventListener('input', function() {
                 updateVariables();
                 evaluateAllCalculators();
+                saveCurrentState();
             });
+            
+            // Add input listener to notes field
+            const notesField = document.getElementById(`notesField${newCalculatorId}`);
+            if (notesField) {
+                notesField.addEventListener('input', saveCurrentState);
+            }
         }
 
         // Function to evaluate all calculators
@@ -795,6 +1016,195 @@ Excel like calculator
             // Open unit converter in a new window
             window.open('unitconverter.html', 'UnitConverter', 'width=800,height=800,scrollbars=yes');
         });
+
+        // Download functionality
+        document.getElementById('downloadApp').addEventListener('click', function() {
+            generateDownloadableHTML();
+        });
+
+        function generateDownloadableHTML() {
+            // Create a deep clone of the current document
+            const docClone = document.cloneNode(true);
+            
+            // Remove the download button from clone
+            const downloadBtn = docClone.querySelector('#downloadApp');
+            if (downloadBtn) downloadBtn.remove();
+            
+            // Process locked inputs
+            docClone.querySelectorAll('.lock-btn').forEach(btn => {
+                const targetId = btn.dataset.target;
+                const targetInput = docClone.getElementById(targetId);
+                
+                if (targetInput && lockedInputs.has(targetId)) {
+                    // Make locked inputs read-only in the downloaded version
+                    targetInput.disabled = true;
+                    targetInput.classList.add('locked-input');
+                    if (targetId === 'notesField') {
+                        targetInput.contentEditable = 'false';
+                    }
+                }
+                // Remove the lock button itself
+                btn.remove();
+            });
+            
+            // Remove any leftover lock buttons
+            docClone.querySelectorAll('.lock-btn').forEach(btn => btn.remove());
+            
+            // Add a title to indicate it's a saved version
+            const title = docClone.querySelector('title');
+            if (title) {
+                title.textContent = 'My Saved Calculator - ' + title.textContent;
+            }
+            
+            // Add a header note
+            const body = docClone.querySelector('body');
+            const savedNote = docClone.createElement('div');
+            savedNote.innerHTML = '<div style="background: #e8f4f8; padding: 10px; margin: 10px 0; border-left: 4px solid #3498db;"><strong>📱 Offline Calculator App</strong><br>This is your saved calculator. All locked inputs are read-only. You can edit unlocked fields.</div>';
+            if (body.firstChild) {
+                body.insertBefore(savedNote, body.firstChild);
+            }
+            
+            // Generate the HTML string
+            let htmlString = `<!DOCTYPE html>\n<html lang="en">\n`;
+            
+            // Add head section
+            htmlString += docClone.querySelector('head').outerHTML + '\n';
+            
+            // Add body section
+            htmlString += '<body>\n';
+            htmlString += docClone.querySelector('body').innerHTML + '\n';
+            htmlString += '</body>\n</html>';
+            
+            // Clean up unnecessary scripts (like Google Ads)
+            htmlString = htmlString.replace(/<script async src="https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js[^>]*><\/script>/g, '');
+            
+            // Remove PWA-related scripts for pure offline version
+            htmlString = htmlString.replace(/<script>[^]*?installApp[^]*?<\/script>/g, '');
+            htmlString = htmlString.replace(/<script>[^]*?serviceWorker[^]*?<\/script>/g, '');
+            
+            // Create and trigger download
+            const blob = new Blob([htmlString], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `my-calculator-${new Date().toISOString().slice(0, 10)}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Save current state to localStorage
+        function saveCurrentState() {
+            const state = {
+                calculators: [],
+                variables: [],
+                notes: document.getElementById('notesField').innerHTML,
+                lockedInputs: Array.from(lockedInputs),
+                calculatorCount: calculatorCount
+            };
+            
+            // Save calculator states
+            for (let i = 1; i <= calculatorCount; i++) {
+                const inputField = document.getElementById(`inputField${i}`);
+                const resultField = document.getElementById(`resultField${i}`);
+                const notesField = document.getElementById(`notesField${i}`);
+                
+                if (inputField && resultField) {
+                    state.calculators.push({
+                        formula: inputField.value,
+                        variableName: resultField.value,
+                        notes: notesField ? notesField.value : ''
+                    });
+                }
+            }
+            
+            // Save variable states
+            for (let i = 1; i <= 10; i++) {
+                const nameInput = document.getElementById(`variableName${i}`);
+                const valueInput = document.getElementById(`variableValue${i}`);
+                const unitInput = document.getElementById(`unit${i}`);
+                
+                if (nameInput) {
+                    state.variables.push({
+                        name: nameInput.value,
+                        value: valueInput.value,
+                        unit: unitInput ? unitInput.value : ''
+                    });
+                }
+            }
+            
+            localStorage.setItem('calculatorState', JSON.stringify(state));
+        }
+
+        // Load state from localStorage
+        function loadSavedState() {
+            const saved = localStorage.getItem('calculatorState');
+            if (saved) {
+                const state = JSON.parse(saved);
+                
+                // Update calculator count
+                if (state.calculatorCount) {
+                    while (calculatorCount < state.calculatorCount) {
+                        createCalculator();
+                    }
+                }
+                
+                // Load calculators
+                state.calculators.forEach((calc, index) => {
+                    const i = index + 1;
+                    const inputField = document.getElementById(`inputField${i}`);
+                    const resultField = document.getElementById(`resultField${i}`);
+                    const notesField = document.getElementById(`notesField${i}`);
+                    
+                    if (inputField && resultField) {
+                        inputField.value = calc.formula || '';
+                        resultField.value = calc.variableName || '';
+                        if (notesField && calc.notes !== undefined) {
+                            notesField.value = calc.notes;
+                        }
+                    }
+                });
+                
+                // Load variables
+                state.variables.forEach((variable, index) => {
+                    const i = index + 1;
+                    const nameInput = document.getElementById(`variableName${i}`);
+                    const valueInput = document.getElementById(`variableValue${i}`);
+                    const unitInput = document.getElementById(`unit${i}`);
+                    
+                    if (nameInput) nameInput.value = variable.name || '';
+                    if (valueInput) valueInput.value = variable.value || '';
+                    if (unitInput) unitInput.value = variable.unit || '';
+                });
+                
+                // Load notes
+                if (state.notes) {
+                    document.getElementById('notesField').innerHTML = state.notes;
+                }
+                
+                // Load locked inputs
+                if (state.lockedInputs) {
+                    state.lockedInputs.forEach(id => {
+                        lockedInputs.add(id);
+                        const input = document.getElementById(id);
+                        const lockBtn = document.querySelector(`button[data-target="${id}"]`);
+                        if (input && lockBtn) {
+                            lockBtn.textContent = '🔒';
+                            lockBtn.classList.add('locked');
+                            input.classList.add('locked-input');
+                            input.disabled = true;
+                            if (id === 'notesField') {
+                                input.contentEditable = 'false';
+                            }
+                        }
+                    });
+                }
+                
+                // Re-evaluate everything
+                evaluateAllCalculators();
+            }
+        }
 
         // Get references to the input fields and output fields
         const variableNameInputs = [
@@ -1017,41 +1427,61 @@ Excel like calculator
         // Add event listeners to the input fields
         inputField1.addEventListener('input', function () {
             evaluateExpression(inputField1.value, outputField1, resultField1);
+            saveCurrentState();
         });
 
         inputField2.addEventListener('input', function () {
             evaluateExpression(inputField2.value, outputField2, resultField2);
+            saveCurrentState();
         });
 
         // Add event listeners to all variable value fields
         variableValueInputs.forEach(input => {
-            input.addEventListener('input', function () {
-                // Re-evaluate all calculators when a variable value changes
-                evaluateAllCalculators();
-            });
+            if (input) {
+                input.addEventListener('input', function () {
+                    // Re-evaluate all calculators when a variable value changes
+                    evaluateAllCalculators();
+                    saveCurrentState();
+                });
+            }
+        });
+        
+        // Add event listeners to variable name fields
+        variableNameInputs.forEach(input => {
+            if (input) {
+                input.addEventListener('input', function() {
+                    updateVariables();
+                    evaluateAllCalculators();
+                    saveCurrentState();
+                });
+            }
         });
         
         // Add event listeners to result fields to update variables when they change
         resultField1.addEventListener('input', function() {
             updateVariables();
             evaluateAllCalculators();
+            saveCurrentState();
         });
         
         resultField2.addEventListener('input', function() {
             updateVariables();
             evaluateAllCalculators();
+            saveCurrentState();
         });
 
-        // New Constants Popup Functions
-        function showConstantsPopup() {
-            document.getElementById('constantsPopup').style.display = 'block';
+        // Add event listener to notes field
+        notesField.addEventListener('input', saveCurrentState);
+
+        // Add event listeners to unit fields
+        for (let i = 1; i <= 10; i++) {
+            const unitInput = document.getElementById(`unit${i}`);
+            if (unitInput) {
+                unitInput.addEventListener('input', saveCurrentState);
+            }
         }
 
-        function closeConstantsPopup() {
-            document.getElementById('constantsPopup').style.display = 'none';
-        }
-
-        // Unit Converter Functions
+  // Unit Converter Functions
         function showUnitConverter() {
             document.getElementById('unitConverterModal').style.display = 'block';
         }
@@ -1252,6 +1682,18 @@ Excel like calculator
             document.getElementById('energy-result').textContent = result.toFixed(6);
         }
 
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLockButtons();
+            loadSavedState();
+            
+            // Add auto-save for input changes
+            document.addEventListener('input', function(e) {
+                if (e.target.tagName === 'INPUT' || e.target.id === 'notesField') {
+                    setTimeout(saveCurrentState, 100);
+                }
+            });
+        });
 
     </script>
 
@@ -1284,6 +1726,3 @@ if ("serviceWorker" in navigator) {
     
 </body>
 </html>
-
-
-
