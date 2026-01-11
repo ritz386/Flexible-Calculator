@@ -70,6 +70,41 @@
         #addCalculatorBtn:hover {
             background-color: #45a049;
         }
+        /* Save button styles */
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+        .download-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .download-btn:hover {
+            background-color: #1976D2;
+        }
+        /* Save status indicator */
+        .saved-indicator {
+            color: #4CAF50;
+            font-size: 10px;
+            margin-left: 5px;
+            display: none;
+        }
+        
          /* Unit Converter Modal Styles */
         #unitConverterModal {
             display: none;
@@ -167,6 +202,12 @@
     </style>
 </head>
 <body>
+    <!-- Export Controls -->
+    <div style="margin-bottom: 15px; padding: 10px; background-color: #f5f5f5; border-radius: 5px;">
+        <button class="download-btn" onclick="downloadAsHTML()">⬇️ Download Calculator as HTML</button>
+        <span id="downloadStatus" style="margin-left: 10px; color: #666; font-size: 11px;"></span>
+    </div>
+    
     <img src="title.jpg" alt="Math Tool Box">
 <br>
     <font size="3"><i>for scientific, engineering, and day-to-day calculations </i> <font size="5"><b>&#9881</b></font><font size="5"><b>&#9787</b></font><font size="5"><b>&#9786</b></font></font><br>
@@ -185,9 +226,17 @@
             <div class="expression-container">
                 <label for="inputField1"><font size="3"><b><i>Calculator:</i></b></font></label>
                 <input type="text" class="result-input" id="resultField1" placeholder="variable name (e.g. P)">
-                 <input type="text" placeholder="Notes (e.g. P means pressure)">
+                <button class="save-btn" onclick="saveInput('resultField1')">💾</button>
+                <span class="saved-indicator" id="saved_resultField1">✓</span>
+                 <input type="text" placeholder="Notes (e.g. P means pressure)" id="notesField1">
+                 <button class="save-btn" onclick="saveInput('notesField1')">💾</button>
+                <span class="saved-indicator" id="saved_notesField1">✓</span>
             </div>         
-            <input type="text" id="inputField1" placeholder="a function (e.g. n*R*T/V)" style="height: 30px;"> 
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="inputField1" placeholder="a function (e.g. n*R*T/V)" style="height: 30px; width: 280px;">
+                <button class="save-btn" onclick="saveInput('inputField1')">💾 Save</button>
+                <span class="saved-indicator" id="saved_inputField1">✓ Saved</span>
+            </div>
             <font color="#808080" size="2">syntax: for log use <b>logx(y)</b> where x is the base, <b>pi = 3.14159</b>, <b>e = 2.718</b><br> <b>sin-1(x)</b> returns sin inverse of x, <b>angles in degrees in trigonometric calculations</b></font>
             <br>
             <label for="outputField1"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
@@ -199,10 +248,17 @@
             <div class="expression-container">
                 <label for="inputField2"><font size="3"><b><i>Calculator:</i></b></font></label>
                 <input type="text" class="result-input" id="resultField2" placeholder="variable name">
-                <input type="text" placeholder="Notes">
-
+                <button class="save-btn" onclick="saveInput('resultField2')">💾</button>
+                <span class="saved-indicator" id="saved_resultField2">✓</span>
+                <input type="text" placeholder="Notes" id="notesField2">
+                <button class="save-btn" onclick="saveInput('notesField2')">💾</button>
+                <span class="saved-indicator" id="saved_notesField2">✓</span>
             </div>
-            <input type="text" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px;">
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px; width: 280px;">
+                <button class="save-btn" onclick="saveInput('inputField2')">💾 Save</button>
+                <span class="saved-indicator" id="saved_inputField2">✓ Saved</span>
+            </div>
             <label for="outputField2"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
             <output id="outputField2">0</output>
         </div>
@@ -221,7 +277,11 @@
     <div class="variable-input">
         <input type="text" id="variableName1" placeholder="V"><font size="4">:</font>
         <input type="text" id="variableValue1" placeholder="value (e.g., 10)">
-        <input type="text" id="unit" placeholder="unit">        
+        <button class="save-btn" onclick="saveInput('variableValue1')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue1">✓</span>
+        <input type="text" id="unit1" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit1')">💾</button>
+        <span class="saved-indicator" id="saved_unit1">✓</span>
         <font color="#0000A0">The 7 SI units: Second (s, time), metre (m, length), kilogram (kg, mass),<br>
             ampere (A, electric current), kelvin (K, thermodynamic temperature),<br> 
             mole (mol, amount of substance), and candela (cd, luminous intensity).</font>
@@ -230,7 +290,11 @@
     <div class="variable-input">
         <input type="text" id="variableName2" placeholder="n"><font size="4">:</font>
         <input type="text" id="variableValue2" placeholder="value (e.g., 2)">
-        <input type="text" id="unit" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('variableValue2')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue2">✓</span>
+        <input type="text" id="unit2" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit2')">💾</button>
+        <span class="saved-indicator" id="saved_unit2">✓</span>
         1 mile = 1760 yards (1.6093 km) <br>
         1 yard = 3 feet <br>
         1 furlong = 220 yard (201.168 meter)
@@ -239,7 +303,11 @@
     <div class="variable-input">
         <input type="text" id="variableName3" placeholder="R"><font size="4">:</font>
         <input type="text" id="variableValue3" placeholder="value (e.g., 8.314)">
-        <input type="text" id="unit" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('variableValue3')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue3">✓</span>
+        <input type="text" id="unit3" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit3')">💾</button>
+        <span class="saved-indicator" id="saved_unit3">✓</span>
         1 foot (feet) = 12 inch <br>
         1 inch = 2.54 cm <br>
         1 foot (feet) = 30.48 cm
@@ -248,7 +316,11 @@
     <div class="variable-input">
         <input type="text" id="variableName4" placeholder="T"><font size="4">:</font>
         <input type="text" id="variableValue4" placeholder="value (e.g., 300)">
-        <input type="text" id="unit" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('variableValue4')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue4">✓</span>
+        <input type="text" id="unit4" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit4')">💾</button>
+        <span class="saved-indicator" id="saved_unit4">✓</span>
         1 hector = 10000 m2 = 107639.147 sqft <br>
         1 m2 = 10,7639 sqft. <br>
         1 hector = 2.471 acre, 1 acre = 43,560 sqft
@@ -257,7 +329,11 @@
     <div class="variable-input">
         <input type="text" id="variableName5" placeholder=""><font size="4">:</font>
         <input type="text" id="variableValue5" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('variableValue5')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue5">✓</span>
+        <input type="text" id="unit5" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit5')">💾</button>
+        <span class="saved-indicator" id="saved_unit5">✓</span>
         1 metric ton = 1000 kg <br>
         1 ton (US) = 2000 pound (907.18 kg) <br>
         1 pound = 16 ounce
@@ -266,7 +342,11 @@
     <div class="variable-input">
         <input type="text" id="variableName6" placeholder=""><font size="4">:</font>
         <input type="text" id="variableValue6" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('variableValue6')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue6">✓</span>
+        <input type="text" id="unit6" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit6')">💾</button>
+        <span class="saved-indicator" id="saved_unit6">✓</span>
         1 pound = 453.592 gm = 0.4536 kg <br>
         1 ounce = 28.3495 gm <br>
         1 kg = 2.2046 pound
@@ -275,7 +355,11 @@
     <div class="variable-input">
         <input type="text" id="variableName7" placeholder=""><font size="4">:</font>
         <input type="text" id="variableValue7" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('variableValue7')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue7">✓</span>
+        <input type="text" id="unit7" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit7')">💾</button>
+        <span class="saved-indicator" id="saved_unit7">✓</span>
         1 decimeter = 10 centimeter<br>
         1 decameter = 10 meter<br>
         1 decigram = 0.1 gram
@@ -284,7 +368,11 @@
     <div class="variable-input">
         <input type="text" id="variableName8" placeholder=""><font size="4">:</font>
         <input type="text" id="variableValue8" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('variableValue8')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue8">✓</span>
+        <input type="text" id="unit8" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit8')">💾</button>
+        <span class="saved-indicator" id="saved_unit8">✓</span>
         1 decagram = 10 gram <br>
         1 deciliter = 100 milliliter <br>
         1 decaliter = 10 liter
@@ -293,7 +381,11 @@
     <div class="variable-input">
         <input type="text" id="variableName9" placeholder=""><font size="4">:</font>
         <input type="text" id="variableValue9" placeholder="">
-        <input type="text" id="unit" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('variableValue9')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue9">✓</span>
+        <input type="text" id="unit9" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit9')">💾</button>
+        <span class="saved-indicator" id="saved_unit9">✓</span>
         Avogadro's number (Na): 6.022*10^23 mol-1 <br>
         Boltzmann constant (k): 1.380649*10^(-23) m2 kg s-2 K-1 <br>
         Planck's constant (h):  6.62607015*10^(-34) m2 kg / s
@@ -302,7 +394,11 @@
     <div class="variable-input">
         <input type="text" id="variableName10" placeholder=""><font size="4">:</font>
         <input type="text" id="variableValue10" placeholder="">
-         <input type="text" id="unit" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue10')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue10">✓</span>
+         <input type="text" id="unit10" placeholder="">
+         <button class="save-btn" onclick="saveInput('unit10')">💾</button>
+        <span class="saved-indicator" id="saved_unit10">✓</span>
         Elementary charge (c): 1.60217663*10^(-19) coulombs <br>
         Faraday constant (F): 96 485.3321  sA / mol <br>
         The gas constant (R): is 8.314 J / mol·K., to all constants (to be updated)
@@ -312,6 +408,8 @@
     <div class="calculation-group">
         <label for="notesField">Notes:</label>
         <div id="notesField" class="notes-field" contenteditable="true" placeholder="Write your notes here..."></div>
+        <button class="save-btn" onclick="saveNotes()" style="margin-top: 5px;">💾 Save Notes</button>
+        <span class="saved-indicator" id="saved_notesField">✓ Saved</span>
 Advanced scientific calculator,
 All purpose scientific calculator,
 Excel like calculator
@@ -686,6 +784,136 @@ Excel like calculator
 
 
     <script>
+        // ============================================
+        // EXPORT/SAVE FUNCTIONALITY
+        // ============================================
+        
+        // Object to store saved inputs
+        let savedInputs = {};
+        
+        // Function to save an input field
+        function saveInput(fieldId) {
+            const element = document.getElementById(fieldId);
+            if (element) {
+                savedInputs[fieldId] = element.value;
+                
+                // Show saved indicator
+                const indicator = document.getElementById('saved_' + fieldId);
+                if (indicator) {
+                    indicator.style.display = 'inline';
+                    setTimeout(() => {
+                        indicator.style.display = 'none';
+                    }, 2000);
+                }
+                
+                console.log('Saved:', fieldId, '=', element.value);
+            }
+        }
+        
+        // Function to save notes (contenteditable div)
+        function saveNotes() {
+            const notesField = document.getElementById('notesField');
+            if (notesField) {
+                savedInputs['notesField'] = notesField.innerHTML;
+                
+                // Show saved indicator
+                const indicator = document.getElementById('saved_notesField');
+                if (indicator) {
+                    indicator.style.display = 'inline';
+                    setTimeout(() => {
+                        indicator.style.display = 'none';
+                    }, 2000);
+                }
+                
+                console.log('Notes saved');
+            }
+        }
+        
+        // Function to download as standalone HTML
+        function downloadAsHTML() {
+            // First, ensure all calculations are up to date
+            evaluateAllCalculators();
+            
+            // Create a clone of the current document
+            const clone = document.documentElement.cloneNode(true);
+            
+            // Remove the download button and status from the clone
+            const downloadSection = clone.querySelector('div');
+            if (downloadSection && downloadSection.querySelector('.download-btn')) {
+                downloadSection.remove();
+            }
+            
+            // Create initialization script that will set all saved values
+            const initScript = `
+            <script>
+            // Initialize saved values on load
+            document.addEventListener('DOMContentLoaded', function() {
+                const savedValues = ${JSON.stringify(savedInputs, null, 2)};
+                
+                // Set input field values
+                Object.keys(savedValues).forEach(fieldId => {
+                    const element = document.getElementById(fieldId);
+                    if (element) {
+                        if (fieldId === 'notesField') {
+                            element.innerHTML = savedValues[fieldId];
+                        } else {
+                            element.value = savedValues[fieldId];
+                        }
+                        
+                        // Trigger input event to recalculate if it's a calculator input
+                        if (fieldId.startsWith('inputField') || fieldId.startsWith('variableValue')) {
+                            const event = new Event('input');
+                            element.dispatchEvent(event);
+                        }
+                    }
+                });
+                
+                // Re-evaluate all calculators after a short delay
+                setTimeout(function() {
+                    if (typeof evaluateAllCalculators === 'function') {
+                        evaluateAllCalculators();
+                    }
+                }, 100);
+            });
+            <\/script>
+            `;
+            
+            // Convert clone to HTML string
+            let htmlString = '<!DOCTYPE html>\n' + clone.outerHTML;
+            
+            // Insert initialization script before closing body tag
+            const bodyEndIndex = htmlString.lastIndexOf('</body>');
+            if (bodyEndIndex !== -1) {
+                htmlString = htmlString.substring(0, bodyEndIndex) + 
+                            initScript + 
+                            htmlString.substring(bodyEndIndex);
+            }
+            
+            // Create and download the file
+            const blob = new Blob([htmlString], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Calculator-${new Date().toISOString().slice(0, 10)}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // Show download status
+            const status = document.getElementById('downloadStatus');
+            if (status) {
+                status.textContent = '✓ Calculator downloaded successfully!';
+                setTimeout(() => {
+                    status.textContent = '';
+                }, 3000);
+            }
+        }
+        
+        // ============================================
+        // EXISTING CALCULATOR CODE (UNCHANGED)
+        // ============================================
+        
         // Counter for additional calculators
         let calculatorCount = 2;
 
@@ -699,9 +927,17 @@ Excel like calculator
                     <div class="expression-container">
                         <label for="inputField${newCalculatorId}"><font size="3"><b><i>Calculator:</i></b></font></label>
                         <input type="text" class="result-input" id="resultField${newCalculatorId}" placeholder="Result variable name">
-                        <input type="text" placeholder="Notes">
+                        <button class="save-btn" onclick="saveInput('resultField${newCalculatorId}')">💾</button>
+                        <span class="saved-indicator" id="saved_resultField${newCalculatorId}">✓</span>
+                        <input type="text" placeholder="Notes" id="notesField${newCalculatorId}">
+                        <button class="save-btn" onclick="saveInput('notesField${newCalculatorId}')">💾</button>
+                        <span class="saved-indicator" id="saved_notesField${newCalculatorId}">✓</span>
                     </div>
-                    <input type="text" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px;">
+                    <div style="display: flex; align-items: center;">
+                        <input type="text" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px; width: 280px;">
+                        <button class="save-btn" onclick="saveInput('inputField${newCalculatorId}')">💾 Save</button>
+                        <span class="saved-indicator" id="saved_inputField${newCalculatorId}">✓ Saved</span>
+                    </div>
                     <label for="outputField${newCalculatorId}"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
                     <output id="outputField${newCalculatorId}">0</output>
                 </div>
@@ -997,7 +1233,7 @@ Excel like calculator
         });
 
 
-  // Unit Converter Functions
+        // Unit Converter Functions
         function showUnitConverter() {
             document.getElementById('unitConverterModal').style.display = 'block';
         }
