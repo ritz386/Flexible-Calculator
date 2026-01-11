@@ -273,9 +273,12 @@
     <button onclick="showUnitConverter()" style="margin-left:10px; padding:5px 10px; background:#3498db; color:white; border:none; border-radius:4px; cursor:pointer;">Click for unit converter</button>
  
 
-    <!-- Variable Input Fields -->
+    <!-- Variable Input Fields - FIXED: Added save buttons for variable names -->
     <div class="variable-input">
-        <input type="text" id="variableName1" placeholder="V"><font size="4">:</font>
+        <input type="text" id="variableName1" placeholder="V">
+        <button class="save-btn" onclick="saveInput('variableName1')">💾</button>
+        <span class="saved-indicator" id="saved_variableName1">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue1" placeholder="value (e.g., 10)">
         <button class="save-btn" onclick="saveInput('variableValue1')">💾</button>
         <span class="saved-indicator" id="saved_variableValue1">✓</span>
@@ -288,7 +291,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName2" placeholder="n"><font size="4">:</font>
+        <input type="text" id="variableName2" placeholder="n">
+        <button class="save-btn" onclick="saveInput('variableName2')">💾</button>
+        <span class="saved-indicator" id="saved_variableName2">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue2" placeholder="value (e.g., 2)">
         <button class="save-btn" onclick="saveInput('variableValue2')">💾</button>
         <span class="saved-indicator" id="saved_variableValue2">✓</span>
@@ -301,7 +307,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName3" placeholder="R"><font size="4">:</font>
+        <input type="text" id="variableName3" placeholder="R">
+        <button class="save-btn" onclick="saveInput('variableName3')">💾</button>
+        <span class="saved-indicator" id="saved_variableName3">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue3" placeholder="value (e.g., 8.314)">
         <button class="save-btn" onclick="saveInput('variableValue3')">💾</button>
         <span class="saved-indicator" id="saved_variableValue3">✓</span>
@@ -314,7 +323,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName4" placeholder="T"><font size="4">:</font>
+        <input type="text" id="variableName4" placeholder="T">
+        <button class="save-btn" onclick="saveInput('variableName4')">💾</button>
+        <span class="saved-indicator" id="saved_variableName4">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue4" placeholder="value (e.g., 300)">
         <button class="save-btn" onclick="saveInput('variableValue4')">💾</button>
         <span class="saved-indicator" id="saved_variableValue4">✓</span>
@@ -327,7 +339,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName5" placeholder=""><font size="4">:</font>
+        <input type="text" id="variableName5" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName5')">💾</button>
+        <span class="saved-indicator" id="saved_variableName5">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue5" placeholder="">
         <button class="save-btn" onclick="saveInput('variableValue5')">💾</button>
         <span class="saved-indicator" id="saved_variableValue5">✓</span>
@@ -340,7 +355,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName6" placeholder=""><font size="4">:</font>
+        <input type="text" id="variableName6" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName6')">💾</button>
+        <span class="saved-indicator" id="saved_variableName6">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue6" placeholder="">
         <button class="save-btn" onclick="saveInput('variableValue6')">💾</button>
         <span class="saved-indicator" id="saved_variableValue6">✓</span>
@@ -353,7 +371,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName7" placeholder=""><font size="4">:</font>
+        <input type="text" id="variableName7" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName7')">💾</button>
+        <span class="saved-indicator" id="saved_variableName7">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue7" placeholder="">
         <button class="save-btn" onclick="saveInput('variableValue7')">💾</button>
         <span class="saved-indicator" id="saved_variableValue7">✓</span>
@@ -366,7 +387,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName8" placeholder=""><font size="4">:</font>
+        <input type="text" id="variableName8" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName8')">💾</button>
+        <span class="saved-indicator" id="saved_variableName8">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue8" placeholder="">
         <button class="save-btn" onclick="saveInput('variableValue8')">💾</button>
         <span class="saved-indicator" id="saved_variableValue8">✓</span>
@@ -379,7 +403,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName9" placeholder=""><font size="4">:</font>
+        <input type="text" id="variableName9" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName9')">💾</button>
+        <span class="saved-indicator" id="saved_variableName9">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue9" placeholder="">
         <button class="save-btn" onclick="saveInput('variableValue9')">💾</button>
         <span class="saved-indicator" id="saved_variableValue9">✓</span>
@@ -392,7 +419,10 @@
     </div>
 
     <div class="variable-input">
-        <input type="text" id="variableName10" placeholder=""><font size="4">:</font>
+        <input type="text" id="variableName10" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName10')">💾</button>
+        <span class="saved-indicator" id="saved_variableName10">✓</span>
+        <font size="4">:</font>
         <input type="text" id="variableValue10" placeholder="">
         <button class="save-btn" onclick="saveInput('variableValue10')">💾</button>
         <span class="saved-indicator" id="saved_variableValue10">✓</span>
@@ -785,7 +815,7 @@ Excel like calculator
 
     <script>
         // ============================================
-        // EXPORT/SAVE FUNCTIONALITY
+        // EXPORT/SAVE FUNCTIONALITY - FIXED VERSION
         // ============================================
         
         // Object to store saved inputs
@@ -829,7 +859,7 @@ Excel like calculator
             }
         }
         
-        // Function to download as standalone HTML
+        // Function to download as standalone HTML - FIXED VERSION
         function downloadAsHTML() {
             // First, ensure all calculations are up to date
             evaluateAllCalculators();
@@ -843,36 +873,51 @@ Excel like calculator
                 downloadSection.remove();
             }
             
-            // Create initialization script that will set all saved values
+            // Create a BETTER initialization script
             const initScript = `
             <script>
-            // Initialize saved values on load
+            // Initialize saved values on load - FIXED VERSION
             document.addEventListener('DOMContentLoaded', function() {
-                const savedValues = ${JSON.stringify(savedInputs, null, 2)};
-                
-                // Set input field values
-                Object.keys(savedValues).forEach(fieldId => {
-                    const element = document.getElementById(fieldId);
-                    if (element) {
-                        if (fieldId === 'notesField') {
-                            element.innerHTML = savedValues[fieldId];
-                        } else {
-                            element.value = savedValues[fieldId];
+                // Wait a moment for DOM to be fully ready
+                setTimeout(function() {
+                    const savedValues = ${JSON.stringify(savedInputs, null, 2)};
+                    console.log('Loading saved values:', savedValues);
+                    
+                    // Set ALL saved values
+                    Object.keys(savedValues).forEach(fieldId => {
+                        const element = document.getElementById(fieldId);
+                        if (element) {
+                            if (fieldId === 'notesField') {
+                                element.innerHTML = savedValues[fieldId];
+                            } else {
+                                element.value = savedValues[fieldId];
+                                
+                                // IMPORTANT: For input fields, trigger the input event
+                                // This ensures calculations run with saved values
+                                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                                    // Create and dispatch input event
+                                    const inputEvent = new Event('input', {
+                                        bubbles: true,
+                                        cancelable: true
+                                    });
+                                    element.dispatchEvent(inputEvent);
+                                }
+                            }
+                        }
+                    });
+                    
+                    // After setting all values, trigger a global re-evaluation
+                    setTimeout(function() {
+                        if (typeof evaluateAllCalculators === 'function') {
+                            evaluateAllCalculators();
                         }
                         
-                        // Trigger input event to recalculate if it's a calculator input
-                        if (fieldId.startsWith('inputField') || fieldId.startsWith('variableValue')) {
-                            const event = new Event('input');
-                            element.dispatchEvent(event);
+                        // Also update variables
+                        if (typeof updateVariables === 'function') {
+                            updateVariables();
                         }
-                    }
-                });
-                
-                // Re-evaluate all calculators after a short delay
-                setTimeout(function() {
-                    if (typeof evaluateAllCalculators === 'function') {
-                        evaluateAllCalculators();
-                    }
+                    }, 100);
+                    
                 }, 100);
             });
             <\/script>
@@ -894,7 +939,8 @@ Excel like calculator
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Calculator-${new Date().toISOString().slice(0, 10)}.html`;
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+            a.download = `Calculator-${timestamp}.html`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -903,7 +949,7 @@ Excel like calculator
             // Show download status
             const status = document.getElementById('downloadStatus');
             if (status) {
-                status.textContent = '✓ Calculator downloaded successfully!';
+                status.textContent = '✓ Calculator downloaded successfully! It will work offline.';
                 setTimeout(() => {
                     status.textContent = '';
                 }, 3000);
@@ -963,6 +1009,23 @@ Excel like calculator
                 updateVariables();
                 evaluateAllCalculators();
             });
+            
+            // Also add save functionality to the new fields
+            setTimeout(() => {
+                // Ensure the save buttons work
+                const saveBtns = newCalculator.querySelectorAll('.save-btn');
+                saveBtns.forEach(btn => {
+                    if (btn.onclick) {
+                        // Already has onclick from template
+                    } else {
+                        // Add click handler
+                        btn.addEventListener('click', function() {
+                            const fieldId = this.previousElementSibling.id;
+                            saveInput(fieldId);
+                        });
+                    }
+                });
+            }, 100);
         }
 
         // Function to evaluate all calculators
@@ -1217,6 +1280,14 @@ Excel like calculator
         variableValueInputs.forEach(input => {
             input.addEventListener('input', function () {
                 // Re-evaluate all calculators when a variable value changes
+                evaluateAllCalculators();
+            });
+        });
+        
+        // Add event listeners to all variable name fields too
+        variableNameInputs.forEach(input => {
+            input.addEventListener('input', function () {
+                // Re-evaluate all calculators when a variable name changes
                 evaluateAllCalculators();
             });
         });
