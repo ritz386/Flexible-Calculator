@@ -2,243 +2,832 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Mathematical Calculator with Ten Variables</title>
 
     <link rel="manifest" href="manifest.json">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5712588524765113" crossorigin="anonymous"></script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5712588524765113"
+     crossorigin="anonymous"></script>
     
     <style>
-        /* [ALL YOUR EXISTING CSS STYLES - KEEP THEM EXACTLY AS THEY ARE] */
-        /* Copy all the CSS from your current working file here */
-        /* I'm including a condensed version for brevity */
-        * { box-sizing: border-box; }
-        body { font-family: Arial; margin: 5px; padding: 5px; font-size: 8px; max-width: 100%; overflow-x: hidden; background-color: #f8f9fa; }
-        .main-container { max-width: 380px; margin: 0 auto; padding: 5px; }
-        .download-section { background-color: #e3f2fd; border-radius: 6px; padding: 6px; margin-bottom: 8px; border: 1px solid #bbdefb; }
-        .title-section { text-align: center; margin-bottom: 8px; padding: 5px; background-color: white; border-radius: 6px; border: 1px solid #e0e0e0; }
-        .title-img { max-width: 100%; height: auto; margin-bottom: 3px; }
-        .subtitle { font-size: 9px; color: #666; line-height: 1.2; }
-        .calculation-group { margin-bottom: 6px; padding: 6px; background-color: white; border-radius: 5px; border: 1px solid #e0e0e0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .calculator-header { display: flex; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 3px; }
-        .calculator-label { font-size: 9px; font-weight: bold; color: #000; min-width: 45px; }
-        .variable-name-input { width: 40px !important; height: 20px; font-size: 8px; padding: 1px 3px; border: 1px solid #ccc; border-radius: 2px; }
-        .notes-input { width: 75px !important; height: 20px; font-size: 8px; padding: 1px 3px; border: 1px solid #ccc; border-radius: 2px; }
-        .expression-input { width: 100% !important; height: 22px; font-size: 9px; padding: 2px 5px; margin: 4px 0; border: 1px solid #ccc; border-radius: 3px; }
-        .result-container { display: flex; align-items: center; margin-top: 4px; background-color: #fff5f5; padding: 3px 5px; border-radius: 3px; border: 1px solid #ffcdd2; }
-        .result-label { font-size: 9px; font-weight: bold; color: #FF0000; min-width: 40px; }
-        .result-output { flex: 1; height: 20px; font-size: 10px; padding: 2px 5px; border: none; background: transparent; color: #FF0000; font-weight: bold; display: flex; align-items: center; }
-        .save-btn { background-color: #4CAF50; color: white; border: none; padding: 2px 6px; border-radius: 2px; cursor: pointer; font-size: 8px; height: 20px; min-width: 35px; }
-        .save-expr-btn { background-color: #2196F3; color: white; border: none; padding: 2px 6px; border-radius: 2px; cursor: pointer; font-size: 8px; height: 20px; margin-right: 5px; }
-        .saved-indicator { color: #4CAF50; font-size: 8px; margin-left: 2px; display: none; }
-        .syntax-help { font-size: 7px; color: #808080; margin: 3px 0; line-height: 1.1; background-color: #f5f5f5; padding: 3px; border-radius: 2px; }
-        .variables-container { margin: 8px 0; background-color: white; padding: 6px; border-radius: 5px; border: 1px solid #e0e0e0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .variables-title { font-size: 9px; font-weight: bold; margin-bottom: 5px; color: #000; }
-        .variables-subtitle { font-size: 8px; color: #666; margin-bottom: 5px; line-height: 1.2; }
-        .variable-row { display: flex; align-items: center; margin-bottom: 3px; flex-wrap: nowrap; gap: 2px; }
-        .var-name-input { width: 35px !important; height: 18px; font-size: 8px; padding: 1px 3px; border: 1px solid #ccc; border-radius: 2px; }
-        .var-colon { font-size: 9px; margin: 0 1px; color: #666; min-width: 8px; text-align: center; }
-        .var-value-input { width: 50px !important; height: 18px; font-size: 8px; padding: 1px 3px; border: 1px solid #ccc; border-radius: 2px; }
-        .var-unit-input { width: 45px !important; height: 18px; font-size: 8px; padding: 1px 3px; border: 1px solid #ccc; border-radius: 2px; }
-        .compact-save-btn { background-color: #4CAF50; color: white; border: none; padding: 1px 4px; border-radius: 2px; cursor: pointer; font-size: 7px; height: 18px; min-width: 25px; }
-        .unit-converter-btn { background-color: #9c27b0; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 9px; margin: 5px 0; width: 100%; }
-        #addCalculatorBtn { margin: 6px 0; padding: 6px 10px; background-color: #ff9800; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 9px; width: 100%; }
-        .notes-container { margin: 8px 0; padding: 6px; background-color: white; border-radius: 5px; border: 1px solid #e0e0e0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .notes-label { font-size: 9px; font-weight: bold; margin-bottom: 4px; display: block; color: #000; }
-        .notes-field { width: 100%; height: 60px; font-size: 9px; padding: 5px; border: 1px solid #ccc; border-radius: 3px; resize: vertical; overflow: auto; background-color: #fffff0; }
-        .download-btn { background-color: #2196F3; color: white; border: none; padding: 6px 10px; border-radius: 3px; cursor: pointer; font-size: 9px; width: 100%; }
-        #downloadStatus { display: block; font-size: 8px; color: #666; margin-top: 3px; text-align: center; }
-        #installApp { background-color: #673ab7; color: white; border: none; padding: 6px 10px; border-radius: 3px; cursor: pointer; font-size: 9px; width: 100%; margin: 3px 0; display: none; }
-        .help-text { font-size: 8px; color: #666; margin: 3px 0; line-height: 1.2; text-align: center; }
-        #unitConverterModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; overflow-y: auto; padding: 10px; }
-        #unitConverterContent { background-color: #FFFFFF; margin: 0 auto; padding: 10px; border-radius: 8px; width: 100%; max-width: 360px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-        #closeUnitConverter { position: absolute; top: 5px; right: 5px; background: #f44336; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        @media (max-width: 360px) { .main-container { max-width: 340px; padding: 3px; } .variable-name-input { width: 38px !important; } .notes-input { width: 70px !important; } .var-name-input { width: 32px !important; } .var-value-input { width: 45px !important; } .var-unit-input { width: 40px !important; } }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            font-size: 9px;
+        }
+        input, output, textarea {
+            display: block;
+            margin: 0 px 0;
+            padding: 5px;
+            width: 300px;
+            font-size: 11px;
+        }
+        output {
+            border: 1px solid #ccc;
+            width: 300 px;
+            height: 15px;         
+        }
+        .notes-field {
+            width: 350px;
+            height: 100px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            font-size: 10px;
+            resize: vertical;
+            overflow: auto;
+        }
+        .variable-input {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 1px;
+        }
+        .variable-input input {
+            width: 80px;
+        }
+        .calculation-group {
+            margin-bottom: 10px;
+        }
+        .expression-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .result-input {
+            width: 120px;
+            height: 20px;
+            font-size: 12px;
+        }
+        #addCalculatorBtn {
+            margin: 2px 0;
+            padding: 8px 16px;
+            background-color: #45a049;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #addCalculatorBtn:hover {
+            background-color: #45a049;
+        }
+        /* Save button styles */
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+        .download-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .download-btn:hover {
+            background-color: #1976D2;
+        }
+        /* Save status indicator */
+        .saved-indicator {
+            color: #4CAF50;
+            font-size: 10px;
+            margin-left: 5px;
+            display: none;
+        }
+        
+         /* Unit Converter Modal Styles */
+        #unitConverterModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 120%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow: auto;
+        }
+        #unitConverterContent {
+            background-color: #FFFFFF;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+        }
+        #closeUnitConverter {
+            position: absolute;
+            top: 2px;
+            right: 5px;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 100%;
+            width: 30px;
+            height: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .converter-section {
+            margin-bottom: 10px;
+            background-color: white;
+            padding: 1px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 1.3em;
+        }
+        .converter-section h2 {
+            margin-top: 0;
+            color: #000000;
+            font-size: 1.5em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 2px;
+        }
+        .converter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+        }
+        .input-group input[type="number"] {
+            padding: 6px;
+            width: 120px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+           font-size: 1.3em;
+        }
+        .input-group select {
+            padding: 6px;
+            min-width: 150px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        .input-group button {
+            padding: 6px 12px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7em;
+        }
+        .input-group button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-left: 11px;
+             font-size: 1.5em;
+
+        }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <!-- Download Section -->
-        <div class="download-section">
-            <button class="download-btn" onclick="downloadAsHTML()">⬇️ Download Calculator as HTML</button>
-            <span id="downloadStatus"></span>
-            <button id="installApp">📱 Install App</button>
+    <!-- Export Controls -->
+    <div style="margin-bottom: 15px; padding: 10px; background-color: #f5f5f5; border-radius: 5px;">
+        <button class="download-btn" onclick="downloadAsHTML()">⬇️ Download Calculator as HTML</button>
+        <span id="downloadStatus" style="margin-left: 10px; color: #666; font-size: 11px;"></span>
+    </div>
+    
+    <img src="title.jpg" alt="Math Tool Box">
+<br>
+    <font size="3"><i>for scientific, engineering, and day-to-day calculations </i> <font size="5"><b>&#9881</b></font><font size="5"><b>&#9787</b></font><font size="5"><b>&#9786</b></font></font><br>
+
+    <button id="installApp" style="display: none;">Install App</button>
+    
+<br> <font size="2">Example equations: <i><b>PV = nRT</b></i> (ideal gas law), <i><b>Net present value = Rt/(1+i)^t</b></i>, etc.</font>
+   
+    <br>
+ 
+   
+    <!-- Container for all calculators -->
+    <div id="calculatorsContainer">
+        <!-- First Calculation Group -->
+        <div class="calculation-group">
+            <div class="expression-container">
+                <label for="inputField1"><font size="3"><b><i>Calculator:</i></b></font></label>
+                <input type="text" class="result-input" id="resultField1" placeholder="variable name (e.g. P)">
+                <button class="save-btn" onclick="saveInput('resultField1')">💾</button>
+                <span class="saved-indicator" id="saved_resultField1">✓</span>
+                 <input type="text" placeholder="Notes (e.g. P means pressure)" id="notesField1">
+                 <button class="save-btn" onclick="saveInput('notesField1')">💾</button>
+                <span class="saved-indicator" id="saved_notesField1">✓</span>
+            </div>         
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="inputField1" placeholder="a function (e.g. n*R*T/V)" style="height: 30px; width: 280px;">
+                <button class="save-btn" onclick="saveInput('inputField1')">💾 Save</button>
+                <span class="saved-indicator" id="saved_inputField1">✓ Saved</span>
+            </div>
+            <font color="#808080" size="2">syntax: for log use <b>logx(y)</b> where x is the base, <b>pi = 3.14159</b>, <b>e = 2.718</b><br> <b>sin-1(x)</b> returns sin inverse of x, <b>angles in degrees in trigonometric calculations</b></font>
+            <br>
+            <label for="outputField1"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
+            <output id="outputField1">0</output>   
         </div>
+
+        <!-- Second Calculation Group -->
+        <div class="calculation-group">
+            <div class="expression-container">
+                <label for="inputField2"><font size="3"><b><i>Calculator:</i></b></font></label>
+                <input type="text" class="result-input" id="resultField2" placeholder="variable name">
+                <button class="save-btn" onclick="saveInput('resultField2')">💾</button>
+                <span class="saved-indicator" id="saved_resultField2">✓</span>
+                <input type="text" placeholder="Notes" id="notesField2">
+                <button class="save-btn" onclick="saveInput('notesField2')">💾</button>
+                <span class="saved-indicator" id="saved_notesField2">✓</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px; width: 280px;">
+                <button class="save-btn" onclick="saveInput('inputField2')">💾 Save</button>
+                <span class="saved-indicator" id="saved_inputField2">✓ Saved</span>
+            </div>
+            <label for="outputField2"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
+            <output id="outputField2">0</output>
+        </div>
+    </div>
+
+    <!-- Add Calculator Button -->
+    <button id="addCalculatorBtn">Add More Calculators Above</button>
+<br> <font size="2"> List of equations: chemistry, physics, statistics, engineering, economics. (to be updated) </font>
+ <br>
+
+ <font size="2"><b><i>Enter variable names and values with <u><font color="#FF0000">consistent units</font></u></i></b></font>
+    <button onclick="showUnitConverter()" style="margin-left:10px; padding:5px 10px; background:#3498db; color:white; border:none; border-radius:4px; cursor:pointer;">Click for unit converter</button>
+ 
+
+    <!-- Variable Input Fields - FIXED: Added save buttons for variable names -->
+    <div class="variable-input">
+        <input type="text" id="variableName1" placeholder="V">
+        <button class="save-btn" onclick="saveInput('variableName1')">💾</button>
+        <span class="saved-indicator" id="saved_variableName1">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue1" placeholder="value (e.g., 10)">
+        <button class="save-btn" onclick="saveInput('variableValue1')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue1">✓</span>
+        <input type="text" id="unit1" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit1')">💾</button>
+        <span class="saved-indicator" id="saved_unit1">✓</span>
+        <font color="#0000A0">The 7 SI units: Second (s, time), metre (m, length), kilogram (kg, mass),<br>
+            ampere (A, electric current), kelvin (K, thermodynamic temperature),<br> 
+            mole (mol, amount of substance), and candela (cd, luminous intensity).</font>
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName2" placeholder="n">
+        <button class="save-btn" onclick="saveInput('variableName2')">💾</button>
+        <span class="saved-indicator" id="saved_variableName2">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue2" placeholder="value (e.g., 2)">
+        <button class="save-btn" onclick="saveInput('variableValue2')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue2">✓</span>
+        <input type="text" id="unit2" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit2')">💾</button>
+        <span class="saved-indicator" id="saved_unit2">✓</span>
+        1 mile = 1760 yards (1.6093 km) <br>
+        1 yard = 3 feet <br>
+        1 furlong = 220 yard (201.168 meter)
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName3" placeholder="R">
+        <button class="save-btn" onclick="saveInput('variableName3')">💾</button>
+        <span class="saved-indicator" id="saved_variableName3">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue3" placeholder="value (e.g., 8.314)">
+        <button class="save-btn" onclick="saveInput('variableValue3')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue3">✓</span>
+        <input type="text" id="unit3" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit3')">💾</button>
+        <span class="saved-indicator" id="saved_unit3">✓</span>
+        1 foot (feet) = 12 inch <br>
+        1 inch = 2.54 cm <br>
+        1 foot (feet) = 30.48 cm
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName4" placeholder="T">
+        <button class="save-btn" onclick="saveInput('variableName4')">💾</button>
+        <span class="saved-indicator" id="saved_variableName4">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue4" placeholder="value (e.g., 300)">
+        <button class="save-btn" onclick="saveInput('variableValue4')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue4">✓</span>
+        <input type="text" id="unit4" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit4')">💾</button>
+        <span class="saved-indicator" id="saved_unit4">✓</span>
+        1 hector = 10000 m2 = 107639.147 sqft <br>
+        1 m2 = 10,7639 sqft. <br>
+        1 hector = 2.471 acre, 1 acre = 43,560 sqft
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName5" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName5')">💾</button>
+        <span class="saved-indicator" id="saved_variableName5">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue5" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue5')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue5">✓</span>
+        <input type="text" id="unit5" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit5')">💾</button>
+        <span class="saved-indicator" id="saved_unit5">✓</span>
+        1 metric ton = 1000 kg <br>
+        1 ton (US) = 2000 pound (907.18 kg) <br>
+        1 pound = 16 ounce
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName6" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName6')">💾</button>
+        <span class="saved-indicator" id="saved_variableName6">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue6" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue6')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue6">✓</span>
+        <input type="text" id="unit6" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit6')">💾</button>
+        <span class="saved-indicator" id="saved_unit6">✓</span>
+        1 pound = 453.592 gm = 0.4536 kg <br>
+        1 ounce = 28.3495 gm <br>
+        1 kg = 2.2046 pound
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName7" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName7')">💾</button>
+        <span class="saved-indicator" id="saved_variableName7">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue7" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue7')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue7">✓</span>
+        <input type="text" id="unit7" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit7')">💾</button>
+        <span class="saved-indicator" id="saved_unit7">✓</span>
+        1 decimeter = 10 centimeter<br>
+        1 decameter = 10 meter<br>
+        1 decigram = 0.1 gram
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName8" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName8')">💾</button>
+        <span class="saved-indicator" id="saved_variableName8">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue8" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue8')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue8">✓</span>
+        <input type="text" id="unit8" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit8')">💾</button>
+        <span class="saved-indicator" id="saved_unit8">✓</span>
+        1 decagram = 10 gram <br>
+        1 deciliter = 100 milliliter <br>
+        1 decaliter = 10 liter
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName9" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName9')">💾</button>
+        <span class="saved-indicator" id="saved_variableName9">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue9" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue9')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue9">✓</span>
+        <input type="text" id="unit9" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit9')">💾</button>
+        <span class="saved-indicator" id="saved_unit9">✓</span>
+        Avogadro's number (Na): 6.022*10^23 mol-1 <br>
+        Boltzmann constant (k): 1.380649*10^(-23) m2 kg s-2 K-1 <br>
+        Planck's constant (h):  6.62607015*10^(-34) m2 kg / s
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName10" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName10')">💾</button>
+        <span class="saved-indicator" id="saved_variableName10">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue10" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue10')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue10">✓</span>
+         <input type="text" id="unit10" placeholder="">
+         <button class="save-btn" onclick="saveInput('unit10')">💾</button>
+        <span class="saved-indicator" id="saved_unit10">✓</span>
+        Elementary charge (c): 1.60217663*10^(-19) coulombs <br>
+        Faraday constant (F): 96 485.3321  sA / mol <br>
+        The gas constant (R): is 8.314 J / mol·K., to all constants (to be updated)
+    </div>
+
+    <!-- Notes Input Field -->
+    <div class="calculation-group">
+        <label for="notesField">Notes:</label>
+        <div id="notesField" class="notes-field" contenteditable="true" placeholder="Write your notes here..."></div>
+        <button class="save-btn" onclick="saveNotes()" style="margin-top: 5px;">💾 Save Notes</button>
+        <span class="saved-indicator" id="saved_notesField">✓ Saved</span>
+Advanced scientific calculator,
+All purpose scientific calculator,
+Excel like calculator
+    </div>
+
+
+ <div class="units-header">
         
-        <!-- Title Section -->
-        <div class="title-section">
-            <img src="title.jpg" alt="Math Tool Box" class="title-img">
-            <div class="subtitle">
-                <i>for scientific, engineering, and day-to-day calculations</i> 
-                <span style="font-size: 10px;">&#9881;&#9787;&#9786;</span>
-            </div>
-        </div>
-        
-        <div class="help-text">
-            Example equations: <i><b>PV = nRT</b></i> (ideal gas law), 
-            <i><b>Net present value = Rt/(1+i)^t</b></i>
-        </div>
-       
-        <!-- Container for all calculators -->
-        <div id="calculatorsContainer">
-            <!-- First Calculation Group -->
-            <div class="calculation-group" id="calculator_1">
-                <div class="calculator-header">
-                    <span class="calculator-label">Calc:</span>
-                    <input type="text" class="variable-name-input" id="resultField1" placeholder="var">
-                    <button class="save-btn" data-field="resultField1">💾</button>
-                    <span class="saved-indicator" id="saved_resultField1">✓</span>
-                    <input type="text" class="notes-input" placeholder="Notes" id="notesField1">
-                    <button class="save-btn" data-field="notesField1">💾</button>
-                    <span class="saved-indicator" id="saved_notesField1">✓</span>
-                </div>
-                
-                <input type="text" class="expression-input" id="inputField1" placeholder="e.g., n*R*T/V">
-                
-                <div style="display: flex; align-items: center; margin: 3px 0;">
-                    <button class="save-expr-btn" data-field="inputField1">💾 Save</button>
-                    <span class="saved-indicator" id="saved_inputField1">✓ Saved</span>
-                </div>
-                
-                <div class="syntax-help">
-                    Syntax: <b>logx(y)</b>, <b>pi</b>=3.14159, <b>e</b>=2.718, 
-                    <b>sin-1(x)</b>, angles in degrees
-                </div>
-                
-                <div class="result-container">
-                    <span class="result-label">Result:</span>
-                    <div class="result-output" id="outputField1">0</div>
-                </div>
-            </div>
+        <button id="unitConverterBtn">All Unit Converter</button>
+    </div>
+    <br>
 
-            <!-- Second Calculation Group -->
-            <div class="calculation-group" id="calculator_2">
-                <div class="calculator-header">
-                    <span class="calculator-label">Calc:</span>
-                    <input type="text" class="variable-name-input" id="resultField2" placeholder="var">
-                    <button class="save-btn" data-field="resultField2">💾</button>
-                    <span class="saved-indicator" id="saved_resultField2">✓</span>
-                    <input type="text" class="notes-input" placeholder="Notes" id="notesField2">
-                    <button class="save-btn" data-field="notesField2">💾</button>
-                    <span class="saved-indicator" id="saved_notesField2">✓</span>
-                </div>
-                
-                <input type="text" class="expression-input" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a)">
-                
-                <div style="display: flex; align-items: center; margin: 3px 0;">
-                    <button class="save-expr-btn" data-field="inputField2">💾 Save</button>
-                    <span class="saved-indicator" id="saved_inputField2">✓ Saved</span>
-                </div>
-                
-                <div class="result-container">
-                    <span class="result-label">Result:</span>
-                    <div class="result-output" id="outputField2">0</div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Add Calculator Button -->
-        <button id="addCalculatorBtn">+ Add More Calculators</button>
-        
-        <div class="help-text">
-            Equations: chemistry, physics, statistics, engineering, economics.
-        </div>
-
-        <!-- Variables Section -->
-        <div class="variables-container">
-            <div class="variables-title">
-                Variables (with consistent units)
+ <!-- Unit Converter Modal -->
+    <div id="unitConverterModal">
+        <div id="unitConverterContent">
+            <button id="closeUnitConverter" onclick="closeUnitConverter()">×</button>
+            <font size="5"><b>Universal Unit Converter</b></font>
+<br>
+<br>
+<br>
+            
+            <!-- Length Converter -->
+            <div class="converter-section">
+                <h2>Length Converter</h2>
+                <div class="converter-container">
+                    <div class="input-group">
+                        <input type="number" id="length-value" placeholder="Value" step="any">
+                        <select id="length-from">
+                            <option value="pm">Picometers (pm)</option>
+                            <option value="nm">Nanometers (nm)</option>
+                            <option value="μm">Micrometers (μm)</option>
+                            <option value="mm">Millimeters (mm)</option>
+                            <option value="cm">Centimeters (cm)</option>
+                            <option value="dm">Decimeters (dm)</option>
+                            <option value="m" selected>Meters (m)</option>
+                            <option value="dam">Decameters (dam)</option>
+                            <option value="hm">Hectometers (hm)</option>
+                            <option value="km">Kilometers (km)</option>
+                            <option value="in">Inches (in)</option>
+                            <option value="ft">Feet (ft)</option>
+                            <option value="yd">Yards (yd)</option>
+                            <option value="mi">Miles (mi)</option>
+                            <option value="nmi">Nautical Miles (nmi)</option>
+                            <option value="ly">Light Years (ly)</option>
+                            <option value="au">Astronomical Units (AU)</option>
+                            <option value="pc">Parsecs (pc)</option>
+                        </select>
+                        <span>to</span>
+                        <select id="length-to">
+                            <option value="pm">Picometers (pm)</option>
+                            <option value="nm">Nanometers (nm)</option>
+                            <option value="μm">Micrometers (μm)</option>
+                            <option value="mm">Millimeters (mm)</option>
+                            <option value="cm" selected>Centimeters (cm)</option>
+                            <option value="dm">Decimeters (dm)</option>
+                            <option value="m">Meters (m)</option>
+                            <option value="dam">Decameters (dam)</option>
+                            <option value="hm">Hectometers (hm)</option>
+                            <option value="km">Kilometers (km)</option>
+                            <option value="in">Inches (in)</option>
+                            <option value="ft">Feet (ft)</option>
+                            <option value="yd">Yards (yd)</option>
+                            <option value="mi">Miles (mi)</option>
+                            <option value="nmi">Nautical Miles (nmi)</option>
+                            <option value="ly">Light Years (ly)</option>
+                            <option value="au">Astronomical Units (AU)</option>
+                            <option value="pc">Parsecs (pc)</option>
+                        </select>
+                        <button onclick="convertLength()"><font size="2">Convert</font></button>
+                        <span class="result" id="length-result">-</span>
+                    </div>
+                </div>
             </div>
             
-            <button onclick="showUnitConverter()" class="unit-converter-btn">
-                📐 Open Unit Converter
-            </button>
-            
-            <!-- Variable Inputs - 10 rows -->
-            <div class="variable-row">
-                <input type="text" class="var-name-input" id="variableName1" placeholder="V">
-                <button class="compact-save-btn" data-field="variableName1">💾</button>
-                <span class="saved-indicator" id="saved_variableName1">✓</span>
-                <span class="var-colon">:</span>
-                <input type="text" class="var-value-input" id="variableValue1" placeholder="10">
-                <button class="compact-save-btn" data-field="variableValue1">💾</button>
-                <span class="saved-indicator" id="saved_variableValue1">✓</span>
-                <input type="text" class="var-unit-input" id="unit1" placeholder="m³">
-                <button class="compact-save-btn" data-field="unit1">💾</button>
-                <span class="saved-indicator" id="saved_unit1">✓</span>
-            </div>
-            
-            <!-- Repeat for variable rows 2-10 -->
-            <div class="variable-row">
-                <input type="text" class="var-name-input" id="variableName2" placeholder="n">
-                <button class="compact-save-btn" data-field="variableName2">💾</button>
-                <span class="saved-indicator" id="saved_variableName2">✓</span>
-                <span class="var-colon">:</span>
-                <input type="text" class="var-value-input" id="variableValue2" placeholder="2">
-                <button class="compact-save-btn" data-field="variableValue2">💾</button>
-                <span class="saved-indicator" id="saved_variableValue2">✓</span>
-                <input type="text" class="var-unit-input" id="unit2" placeholder="mol">
-                <button class="compact-save-btn" data-field="unit2">💾</button>
-                <span class="saved-indicator" id="saved_unit2">✓</span>
-            </div>
-            
-            <!-- Add rows 3-10 similarly... -->
-            <!-- For brevity, I'll show pattern for remaining rows -->
-            <div class="variable-row" id="varRow3"><input type="text" class="var-name-input" id="variableName3" placeholder="R"><button class="compact-save-btn" data-field="variableName3">💾</button><span class="saved-indicator" id="saved_variableName3">✓</span><span class="var-colon">:</span><input type="text" class="var-value-input" id="variableValue3" placeholder="8.314"><button class="compact-save-btn" data-field="variableValue3">💾</button><span class="saved-indicator" id="saved_variableValue3">✓</span><input type="text" class="var-unit-input" id="unit3" placeholder="J/mol·K"><button class="compact-save-btn" data-field="unit3">💾</button><span class="saved-indicator" id="saved_unit3">✓</span></div>
-            <div class="variable-row" id="varRow4"><input type="text" class="var-name-input" id="variableName4" placeholder="T"><button class="compact-save-btn" data-field="variableName4">💾</button><span class="saved-indicator" id="saved_variableName4">✓</span><span class="var-colon">:</span><input type="text" class="var-value-input" id="variableValue4" placeholder="300"><button class="compact-save-btn" data-field="variableValue4">💾</button><span class="saved-indicator" id="saved_variableValue4">✓</span><input type="text" class="var-unit-input" id="unit4" placeholder="K"><button class="compact-save-btn" data-field="unit4">💾</button><span class="saved-indicator" id="saved_unit4">✓</span></div>
-            <div class="variable-row" id="varRow5"><input type="text" class="var-name-input" id="variableName5" placeholder=""><button class="compact-save-btn" data-field="variableName5">💾</button><span class="saved-indicator" id="saved_variableName5">✓</span><span class="var-colon">:</span><input type="text" class="var-value-input" id="variableValue5" placeholder=""><button class="compact-save-btn" data-field="variableValue5">💾</button><span class="saved-indicator" id="saved_variableValue5">✓</span><input type="text" class="var-unit-input" id="unit5" placeholder=""><button class="compact-save-btn" data-field="unit5">💾</button><span class="saved-indicator" id="saved_unit5">✓</span></div>
-            <div class="variable-row" id="varRow6"><input type="text" class="var-name-input" id="variableName6" placeholder=""><button class="compact-save-btn" data-field="variableName6">💾</button><span class="saved-indicator" id="saved_variableName6">✓</span><span class="var-colon">:</span><input type="text" class="var-value-input" id="variableValue6" placeholder=""><button class="compact-save-btn" data-field="variableValue6">💾</button><span class="saved-indicator" id="saved_variableValue6">✓</span><input type="text" class="var-unit-input" id="unit6" placeholder=""><button class="compact-save-btn" data-field="unit6">💾</button><span class="saved-indicator" id="saved_unit6">✓</span></div>
-            <div class="variable-row" id="varRow7"><input type="text" class="var-name-input" id="variableName7" placeholder=""><button class="compact-save-btn" data-field="variableName7">💾</button><span class="saved-indicator" id="saved_variableName7">✓</span><span class="var-colon">:</span><input type="text" class="var-value-input" id="variableValue7" placeholder=""><button class="compact-save-btn" data-field="variableValue7">💾</button><span class="saved-indicator" id="saved_variableValue7">✓</span><input type="text" class="var-unit-input" id="unit7" placeholder=""><button class="compact-save-btn" data-field="unit7">💾</button><span class="saved-indicator" id="saved_unit7">✓</span></div>
-            <div class="variable-row" id="varRow8"><input type="text" class="var-name-input" id="variableName8" placeholder=""><button class="compact-save-btn" data-field="variableName8">💾</button><span class="saved-indicator" id="saved_variableName8">✓</span><span class="var-colon">:</span><input type="text" class="var-value-input" id="variableValue8" placeholder=""><button class="compact-save-btn" data-field="variableValue8">💾</button><span class="saved-indicator" id="saved_variableValue8">✓</span><input type="text" class="var-unit-input" id="unit8" placeholder=""><button class="compact-save-btn" data-field="unit8">💾</button><span class="saved-indicator" id="saved_unit8">✓</span></div>
-            <div class="variable-row" id="varRow9"><input type="text" class="var-name-input" id="variableName9" placeholder=""><button class="compact-save-btn" data-field="variableName9">💾</button><span class="saved-indicator" id="saved_variableName9">✓</span><span class="var-colon">:</span><input type="text" class="var-value-input" id="variableValue9" placeholder=""><button class="compact-save-btn" data-field="variableValue9">💾</button><span class="saved-indicator" id="saved_variableValue9">✓</span><input type="text" class="var-unit-input" id="unit9" placeholder=""><button class="compact-save-btn" data-field="unit9">💾</button><span class="saved-indicator" id="saved_unit9">✓</span></div>
-            <div class="variable-row" id="varRow10"><input type="text" class="var-name-input" id="variableName10" placeholder=""><button class="compact-save-btn" data-field="variableName10">💾</button><span class="saved-indicator" id="saved_variableName10">✓</span><span class="var-colon">:</span><input type="text" class="var-value-input" id="variableValue10" placeholder=""><button class="compact-save-btn" data-field="variableValue10">💾</button><span class="saved-indicator" id="saved_variableValue10">✓</span><input type="text" class="var-unit-input" id="unit10" placeholder=""><button class="compact-save-btn" data-field="unit10">💾</button><span class="saved-indicator" id="saved_unit10">✓</span></div>
-        </div>
-
-        <!-- Notes Section -->
-        <div class="notes-container">
-            <span class="notes-label">Notes:</span>
-            <div id="notesField" class="notes-field" contenteditable="true" placeholder="Write your notes here..."></div>
-            <div style="margin-top: 4px;">
-                <button class="save-btn" onclick="saveNotes()">💾 Save Notes</button>
-                <span class="saved-indicator" id="saved_notesField">✓ Saved</span>
-            </div>
-            <div class="help-text" style="margin-top: 4px;">
-                Advanced scientific calculator, All purpose, Excel like
-            </div>
-        </div>
-
-        <!-- Unit Converter Modal (simplified for example) -->
-        <div id="unitConverterModal">
-            <div id="unitConverterContent">
-                <button id="closeUnitConverter" onclick="closeUnitConverter()">×</button>
-                <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px; color: #000;">
-                    Universal Unit Converter
+            <!-- Weight Converter -->
+            <div class="converter-section">
+                <h2>Weight Converter</h2>
+                <div class="converter-container">
+                    <div class="input-group">
+                        <input type="number" id="weight-value" placeholder="Value" step="any">
+                        <select id="weight-from">
+                            <option value="μg">Micrograms (μg)</option>
+                            <option value="mg">Milligrams (mg)</option>
+                            <option value="cg">Centigrams (cg)</option>
+                            <option value="dg">Decigrams (dg)</option>
+                            <option value="g">Grams (g)</option>
+                            <option value="dag">Decagrams (dag)</option>
+                            <option value="hg">Hectograms (hg)</option>
+                            <option value="kg" selected>Kilograms (kg)</option>
+                            <option value="t">Metric Tons (t)</option>
+                            <option value="oz">Ounces (oz)</option>
+                            <option value="lb">Pounds (lb)</option>
+                            <option value="st">Stones (st)</option>
+                            <option value="ust">US Tons (short ton)</option>
+                            <option value="ukt">UK Tons (long ton)</option>
+                        </select>
+                        <span>to</span>
+                        <select id="weight-to">
+                            <option value="μg">Micrograms (μg)</option>
+                            <option value="mg">Milligrams (mg)</option>
+                            <option value="cg">Centigrams (cg)</option>
+                            <option value="dg">Decigrams (dg)</option>
+                            <option value="g" selected>Grams (g)</option>
+                            <option value="dag">Decagrams (dag)</option>
+                            <option value="hg">Hectograms (hg)</option>
+                            <option value="kg">Kilograms (kg)</option>
+                            <option value="t">Metric Tons (t)</option>
+                            <option value="oz">Ounces (oz)</option>
+                            <option value="lb">Pounds (lb)</option>
+                            <option value="st">Stones (st)</option>
+                            <option value="ust">US Tons (short ton)</option>
+                            <option value="ukt">UK Tons (long ton)</option>
+                        </select>
+                        <button onclick="convertWeight()"><font size="2">Convert</font></button>
+                        <span class="result" id="weight-result">-</span>
+                    </div>
                 </div>
-                <!-- Converter content... -->
+            </div>
+            
+            <!-- Volume Converter -->
+            <div class="converter-section">
+                <h2>Volume Converter</h2>
+                <div class="converter-container">
+                    <div class="input-group">
+                        <input type="number" id="volume-value" placeholder="Value" step="any">
+                        <select id="volume-from">
+                            <option value="μl">Microliters (μl)</option>
+                            <option value="ml">Milliliters (ml)</option>
+                            <option value="cl">Centiliters (cl)</option>
+                            <option value="dl">Deciliters (dl)</option>
+                            <option value="l" selected>Liters (l)</option>
+                            <option value="dal">Decaliters (dal)</option>
+                            <option value="hl">Hectoliters (hl)</option>
+                            <option value="kl">Kiloliters (kl)</option>
+                            <option value="m3">Cubic Meters (m³)</option>
+                            <option value="tsp">Teaspoons (tsp)</option>
+                            <option value="tbsp">Tablespoons (tbsp)</option>
+                            <option value="floz">Fluid Ounces (fl oz)</option>
+                            <option value="cup">Cups (cup)</option>
+                            <option value="pt">Pints (pt)</option>
+                            <option value="qt">Quarts (qt)</option>
+                            <option value="gal">Gallons (gal)</option>
+                            <option value="in3">Cubic Inches (in³)</option>
+                            <option value="ft3">Cubic Feet (ft³)</option>
+                            <option value="yd3">Cubic Yards (yd³)</option>
+                        </select>
+                        <span>to</span>
+                        <select id="volume-to">
+                            <option value="μl">Microliters (μl)</option>
+                            <option value="ml" selected>Milliliters (ml)</option>
+                            <option value="cl">Centiliters (cl)</option>
+                            <option value="dl">Deciliters (dl)</option>
+                            <option value="l">Liters (l)</option>
+                            <option value="dal">Decaliters (dal)</option>
+                            <option value="hl">Hectoliters (hl)</option>
+                            <option value="kl">Kiloliters (kl)</option>
+                            <option value="m3">Cubic Meters (m³)</option>
+                            <option value="tsp">Teaspoons (tsp)</option>
+                            <option value="tbsp">Tablespoons (tbsp)</option>
+                            <option value="floz">Fluid Ounces (fl oz)</option>
+                            <option value="cup">Cups (cup)</option>
+                            <option value="pt">Pints (pt)</option>
+                            <option value="qt">Quarts (qt)</option>
+                            <option value="gal">Gallons (gal)</option>
+                            <option value="in3">Cubic Inches (in³)</option>
+                            <option value="ft3">Cubic Feet (ft³)</option>
+                            <option value="yd3">Cubic Yards (yd³)</option>
+                        </select>
+                        <button onclick="convertVolume()"><font size="2">Convert</font></button>
+                        <span class="result" id="volume-result">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Area Converter -->
+            <div class="converter-section">
+                <h2>Area Converter</h2>
+                <div class="converter-container">
+                    <div class="input-group">
+                        <input type="number" id="area-value" placeholder="Value" step="any">
+                        <select id="area-from">
+                            <option value="mm2">Square Millimeters (mm²)</option>
+                            <option value="cm2">Square Centimeters (cm²)</option>
+                            <option value="m2" selected>Square Meters (m²)</option>
+                            <option value="ha">Hectares (ha)</option>
+                            <option value="km2">Square Kilometers (km²)</option>
+                            <option value="in2">Square Inches (in²)</option>
+                            <option value="ft2">Square Feet (ft²)</option>
+                            <option value="yd2">Square Yards (yd²)</option>
+                            <option value="ac">Acres (ac)</option>
+                            <option value="mi2">Square Miles (mi²)</option>
+                        </select>
+                        <span>to</span>
+                        <select id="area-to">
+                            <option value="mm2">Square Millimeters (mm²)</option>
+                            <option value="cm2" selected>Square Centimeters (cm²)</option>
+                            <option value="m2">Square Meters (m²)</option>
+                            <option value="ha">Hectares (ha)</option>
+                            <option value="km2">Square Kilometers (km²)</option>
+                            <option value="in2">Square Inches (in²)</option>
+                            <option value="ft2">Square Feet (ft²)</option>
+                            <option value="yd2">Square Yards (yd²)</option>
+                            <option value="ac">Acres (ac)</option>
+                            <option value="mi2">Square Miles (mi²)</option>
+                        </select>
+                        <button onclick="convertArea()"><font size="2">Convert</font></button>
+                        <span class="result" id="area-result">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Temperature Converter -->
+            <div class="converter-section">
+                <h2>Temperature Converter</h2>
+                <div class="converter-container">
+                    <div class="input-group">
+                        <input type="number" id="temp-value" placeholder="Value" step="any">
+                        <select id="temp-from">
+                            <option value="c" selected>Celsius (°C)</option>
+                            <option value="f">Fahrenheit (°F)</option>
+                            <option value="k">Kelvin (K)</option>
+                            <option value="r">Rankine (°R)</option>
+                        </select>
+                        <span>to</span>
+                        <select id="temp-to">
+                            <option value="c">Celsius (°C)</option>
+                            <option value="f" selected>Fahrenheit (°F)</option>
+                            <option value="k">Kelvin (K)</option>
+                            <option value="r">Rankine (°R)</option>
+                        </select>
+                        <button onclick="convertTemperature()"><font size="2">Convert</font></button>
+                        <span class="result" id="temp-result">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pressure Converter -->
+            <div class="converter-section">
+                <h2>Pressure Converter</h2>
+                <div class="converter-container">
+                    <div class="input-group">
+                        <input type="number" id="pressure-value" placeholder="Value" step="any">
+                        <select id="pressure-from">
+                            <option value="pa">Pascals (Pa)</option>
+                            <option value="kpa" selected>Kilopascals (kPa)</option>
+                            <option value="mpa">Megapascals (MPa)</option>
+                            <option value="bar">Bar (bar)</option>
+                            <option value="mbar">Millibar (mbar)</option>
+                            <option value="atm">Atmospheres (atm)</option>
+                            <option value="mmhg">mmHg (mm Hg)</option>
+                            <option value="inhg">inHg (in Hg)</option>
+                            <option value="psi">PSI (lb/in²)</option>
+                            <option value="psf">PSF (lb/ft²)</option>
+                        </select>
+                        <span>to</span>
+                        <select id="pressure-to">
+                            <option value="pa">Pascals (Pa)</option>
+                            <option value="kpa">Kilopascals (kPa)</option>
+                            <option value="mpa">Megapascals (MPa)</option>
+                            <option value="bar" selected>Bar (bar)</option>
+                            <option value="mbar">Millibar (mbar)</option>
+                            <option value="atm">Atmospheres (atm)</option>
+                            <option value="mmhg">mmHg (mm Hg)</option>
+                            <option value="inhg">inHg (in Hg)</option>
+                            <option value="psi">PSI (lb/in²)</option>
+                            <option value="psf">PSF (lb/ft²)</option>
+                        </select>
+                        <button onclick="convertPressure()"><font size="2">Convert</font></button>
+                        <span class="result" id="pressure-result">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Flow Converter -->
+            <div class="converter-section">
+                <h2>Flow Rate Converter</h2>
+                <div class="converter-container">
+                    <div class="input-group">
+                        <input type="number" id="flow-value" placeholder="Value" step="any">
+                        <select id="flow-from">
+                            <option value="lps">Liters per second (l/s)</option>
+                            <option value="lpm" selected>Liters per minute (l/min)</option>
+                            <option value="lph">Liters per hour (l/h)</option>
+                            <option value="m3ps">Cubic meters per second (m³/s)</option>
+                            <option value="m3pm">Cubic meters per minute (m³/min)</option>
+                            <option value="m3ph">Cubic meters per hour (m³/h)</option>
+                            <option value="mlps">Milliliters per second (ml/s)</option>
+                            <option value="mlpm">Milliliters per minute (ml/min)</option>
+                            <option value="mlph">Milliliters per hour (ml/h)</option>
+                            <option value="gps">Gallons per second (gal/s)</option>
+                            <option value="gpm">Gallons per minute (gal/min)</option>
+                            <option value="gph">Gallons per hour (gal/h)</option>
+                            <option value="cfm">Cubic feet per minute (ft³/min)</option>
+                            <option value="cfh">Cubic feet per hour (ft³/h)</option>
+                        </select>
+                        <span>to</span>
+                        <select id="flow-to">
+                            <option value="lps">Liters per second (l/s)</option>
+                            <option value="lpm">Liters per minute (l/min)</option>
+                            <option value="lph" selected>Liters per hour (l/h)</option>
+                            <option value="m3ps">Cubic meters per second (m³/s)</option>
+                            <option value="m3pm">Cubic meters per minute (m³/min)</option>
+                            <option value="m3ph">Cubic meters per hour (m³/h)</option>
+                            <option value="mlps">Milliliters per second (ml/s)</option>
+                            <option value="mlpm">Milliliters per minute (ml/min)</option>
+                            <option value="mlph">Milliliters per hour (ml/h)</option>
+                            <option value="gps">Gallons per second (gal/s)</option>
+                            <option value="gpm">Gallons per minute (gal/min)</option>
+                            <option value="gph">Gallons per hour (gal/h)</option>
+                            <option value="cfm">Cubic feet per minute (ft³/min)</option>
+                            <option value="cfh">Cubic feet per hour (ft³/h)</option>
+                        </select>
+                        <button onclick="convertFlow()"><font size="2">Convert</font></button>
+                        <span class="result" id="flow-result">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Energy Converter -->
+            <div class="converter-section">
+                <h2>Energy Converter</h2>
+                <div class="converter-container">
+                    <div class="input-group">
+                        <input type="number" id="energy-value" placeholder="Value" step="any">
+                        <select id="energy-from">
+                            <option value="j">Joules (J)</option>
+                            <option value="kj">Kilojoules (kJ)</option>
+                            <option value="mj">Megajoules (MJ)</option>
+                            <option value="cal">Calories (cal)</option>
+                            <option value="kcal">Kilocalories (kcal)</option>
+                            <option value="wh">Watt-hours (Wh)</option>
+                            <option value="kwh" selected>Kilowatt-hours (kWh)</option>
+                            <option value="mwh">Megawatt-hours (MWh)</option>
+                            <option value="btu">British Thermal Units (BTU)</option>
+                            <option value="mmbtu">Million BTU (MMBTU)</option>
+                            <option value="ftlb">Foot-pounds (ft·lb)</option>
+                            <option value="ev">Electronvolts (eV)</option>
+                            <option value="kev">Kiloelectronvolts (keV)</option>
+                            <option value="mev">Megaelectronvolts (MeV)</option>
+                            <option value="gev">Gigaelectronvolts (GeV)</option>
+                            <option value="tep">Tonnes of oil equivalent (toe)</option>
+                            <option value="tce">Tonnes of coal equivalent (tce)</option>
+                        </select>
+                        <span>to</span>
+                        <select id="energy-to">
+                            <option value="j">Joules (J)</option>
+                            <option value="kj">Kilojoules (kJ)</option>
+                            <option value="mj">Megajoules (MJ)</option>
+                            <option value="cal">Calories (cal)</option>
+                            <option value="kcal" selected>Kilocalories (kcal)</option>
+                            <option value="wh">Watt-hours (Wh)</option>
+                            <option value="kwh">Kilowatt-hours (kWh)</option>
+                            <option value="mwh">Megawatt-hours (MWh)</option>
+                            <option value="btu">British Thermal Units (BTU)</option>
+                            <option value="mmbtu">Million BTU (MMBTU)</option>
+                            <option value="ftlb">Foot-pounds (ft·lb)</option>
+                            <option value="ev">Electronvolts (eV)</option>
+                            <option value="kev">Kiloelectronvolts (keV)</option>
+                            <option value="mev">Megaelectronvolts (MeV)</option>
+                            <option value="gev">Gigaelectronvolts (GeV)</option>
+                            <option value="tep">Tonnes of oil equivalent (toe)</option>
+                            <option value="tce">Tonnes of coal equivalent (tce)</option>
+                        </select>
+                        <button onclick="convertEnergy()"><font size="2">Convert</font></button>
+                        <span class="result" id="energy-result">-</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+
     <script>
         // ============================================
-        // SOLUTION A: CLEAN RECREATION IMPLEMENTATION
+        // EXPORT/SAVE FUNCTIONALITY - FIXED VERSION
         // ============================================
         
-        // Global state
-        let calculatorCount = 2; // Start with 2 calculators
-        let savedInputs = {}; // Stores all user data
-        let variables = {}; // For calculations
+        // Object to store saved inputs
+        let savedInputs = {};
         
-        // ============================================
-        // 1. CORE FUNCTIONS (Save, Create, Calculate)
-        // ============================================
-        
-        // Save any input field
+        // Function to save an input field
         function saveInput(fieldId) {
             const element = document.getElementById(fieldId);
             if (element) {
                 savedInputs[fieldId] = element.value;
                 
+                // Show saved indicator
                 const indicator = document.getElementById('saved_' + fieldId);
                 if (indicator) {
                     indicator.style.display = 'inline';
@@ -246,15 +835,18 @@
                         indicator.style.display = 'none';
                     }, 2000);
                 }
+                
+                console.log('Saved:', fieldId, '=', element.value);
             }
         }
         
-        // Save notes
+        // Function to save notes (contenteditable div)
         function saveNotes() {
             const notesField = document.getElementById('notesField');
             if (notesField) {
                 savedInputs['notesField'] = notesField.innerHTML;
                 
+                // Show saved indicator
                 const indicator = document.getElementById('saved_notesField');
                 if (indicator) {
                     indicator.style.display = 'inline';
@@ -262,131 +854,93 @@
                         indicator.style.display = 'none';
                     }, 2000);
                 }
-            }
-        }
-        
-        // Create a new calculator
-        function createCalculator(calculatorId) {
-            const calculatorHTML = `
-                <div class="calculation-group" id="calculator_${calculatorId}">
-                    <div class="calculator-header">
-                        <span class="calculator-label">Calc:</span>
-                        <input type="text" class="variable-name-input" id="resultField${calculatorId}" placeholder="var">
-                        <button class="save-btn" data-field="resultField${calculatorId}">💾</button>
-                        <span class="saved-indicator" id="saved_resultField${calculatorId}">✓</span>
-                        <input type="text" class="notes-input" placeholder="Notes" id="notesField${calculatorId}">
-                        <button class="save-btn" data-field="notesField${calculatorId}">💾</button>
-                        <span class="saved-indicator" id="saved_notesField${calculatorId}">✓</span>
-                    </div>
-                    
-                    <input type="text" class="expression-input" id="inputField${calculatorId}" placeholder="Enter expression">
-                    
-                    <div style="display: flex; align-items: center; margin: 3px 0;">
-                        <button class="save-expr-btn" data-field="inputField${calculatorId}">💾 Save</button>
-                        <span class="saved-indicator" id="saved_inputField${calculatorId}">✓ Saved</span>
-                    </div>
-                    
-                    <div class="result-container">
-                        <span class="result-label">Result:</span>
-                        <div class="result-output" id="outputField${calculatorId}">0</div>
-                    </div>
-                </div>
-            `;
-            
-            const container = document.getElementById('calculatorsContainer');
-            const newCalculator = document.createElement('div');
-            newCalculator.innerHTML = calculatorHTML;
-            container.appendChild(newCalculator.firstElementChild);
-            
-            setupCalculatorEvents(calculatorId);
-        }
-        
-        // Setup event listeners for a calculator
-        function setupCalculatorEvents(calculatorId) {
-            const inputField = document.getElementById(`inputField${calculatorId}`);
-            const outputField = document.getElementById(`outputField${calculatorId}`);
-            const resultField = document.getElementById(`resultField${calculatorId}`);
-            
-            if (inputField && outputField && resultField) {
-                inputField.addEventListener('input', function() {
-                    evaluateExpression(inputField.value, outputField, resultField);
-                });
                 
-                resultField.addEventListener('input', function() {
-                    updateVariables();
-                    evaluateAllCalculators();
-                });
+                console.log('Notes saved');
             }
         }
         
-        // Add calculator button
-        document.getElementById('addCalculatorBtn').addEventListener('click', function() {
-            calculatorCount++;
-            createCalculator(calculatorCount);
-        });
-        
-        // ============================================
-        // 2. DOWNLOAD FUNCTIONALITY (SOLUTION A)
-        // ============================================
-        
+        // Function to download as standalone HTML - FIXED VERSION
         function downloadAsHTML() {
-            // Update all calculations before saving
+            // First, ensure all calculations are up to date
             evaluateAllCalculators();
             
-            // Collect all application data
-            const appData = {
-                calculatorCount: calculatorCount,
-                timestamp: new Date().toISOString(),
-                
-                calculators: [],
-                variables: [],
-                notes: document.getElementById('notesField').innerHTML
-            };
+            // Create a clone of the current document
+            const clone = document.documentElement.cloneNode(true);
             
-            // Save calculator data
-            for (let i = 1; i <= calculatorCount; i++) {
-                const inputField = document.getElementById(`inputField${i}`);
-                const resultField = document.getElementById(`resultField${i}`);
-                const notesField = document.getElementById(`notesField${i}`);
-                const outputField = document.getElementById(`outputField${i}`);
-                
-                if (inputField && resultField) {
-                    appData.calculators.push({
-                        id: i,
-                        expression: inputField.value,
-                        resultName: resultField.value,
-                        notes: notesField ? notesField.value : '',
-                        resultValue: outputField ? outputField.textContent : '0'
-                    });
-                }
+            // Remove the download button and status from the clone
+            const downloadSection = clone.querySelector('div');
+            if (downloadSection && downloadSection.querySelector('.download-btn')) {
+                downloadSection.remove();
             }
             
-            // Save variable data
-            for (let i = 1; i <= 10; i++) {
-                const nameField = document.getElementById(`variableName${i}`);
-                const valueField = document.getElementById(`variableValue${i}`);
-                const unitField = document.getElementById(`unit${i}`);
-                
-                if (nameField && valueField && unitField) {
-                    appData.variables.push({
-                        id: i,
-                        name: nameField.value,
-                        value: valueField.value,
-                        unit: unitField.value
+            // Create a BETTER initialization script
+            const initScript = `
+            <script>
+            // Initialize saved values on load - FIXED VERSION
+            document.addEventListener('DOMContentLoaded', function() {
+                // Wait a moment for DOM to be fully ready
+                setTimeout(function() {
+                    const savedValues = ${JSON.stringify(savedInputs, null, 2)};
+                    console.log('Loading saved values:', savedValues);
+                    
+                    // Set ALL saved values
+                    Object.keys(savedValues).forEach(fieldId => {
+                        const element = document.getElementById(fieldId);
+                        if (element) {
+                            if (fieldId === 'notesField') {
+                                element.innerHTML = savedValues[fieldId];
+                            } else {
+                                element.value = savedValues[fieldId];
+                                
+                                // IMPORTANT: For input fields, trigger the input event
+                                // This ensures calculations run with saved values
+                                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                                    // Create and dispatch input event
+                                    const inputEvent = new Event('input', {
+                                        bubbles: true,
+                                        cancelable: true
+                                    });
+                                    element.dispatchEvent(inputEvent);
+                                }
+                            }
+                        }
                     });
-                }
+                    
+                    // After setting all values, trigger a global re-evaluation
+                    setTimeout(function() {
+                        if (typeof evaluateAllCalculators === 'function') {
+                            evaluateAllCalculators();
+                        }
+                        
+                        // Also update variables
+                        if (typeof updateVariables === 'function') {
+                            updateVariables();
+                        }
+                    }, 100);
+                    
+                }, 100);
+            });
+            <\/script>
+            `;
+            
+            // Convert clone to HTML string
+            let htmlString = '<!DOCTYPE html>\n' + clone.outerHTML;
+            
+            // Insert initialization script before closing body tag
+            const bodyEndIndex = htmlString.lastIndexOf('</body>');
+            if (bodyEndIndex !== -1) {
+                htmlString = htmlString.substring(0, bodyEndIndex) + 
+                            initScript + 
+                            htmlString.substring(bodyEndIndex);
             }
             
-            // Create the HTML file content
-            const htmlContent = createDownloadableHTML(appData);
-            
-            // Download the file
-            const blob = new Blob([htmlContent], { type: 'text/html' });
+            // Create and download the file
+            const blob = new Blob([htmlString], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
-            a.download = `MathCalculator-${timestamp}.html`;
+            a.download = `Calculator-${timestamp}.html`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -395,303 +949,162 @@
             // Show download status
             const status = document.getElementById('downloadStatus');
             if (status) {
-                status.textContent = `✓ Downloaded with ${calculatorCount} calculators!`;
+                status.textContent = '✓ Calculator downloaded successfully! It will work offline.';
                 setTimeout(() => {
                     status.textContent = '';
                 }, 3000);
             }
         }
         
-        // Create the downloadable HTML file
-        function createDownloadableHTML(appData) {
-            // Get current page's HTML structure
-            const currentHTML = document.documentElement.outerHTML;
-            
-            // Extract the main container HTML (everything inside body)
-            const bodyStart = currentHTML.indexOf('<body>');
-            const bodyEnd = currentHTML.indexOf('</body>');
-            let bodyContent = currentHTML.substring(bodyStart + 6, bodyEnd);
-            
-            // Remove the download section from the downloaded version
-            bodyContent = bodyContent.replace(/<div class="download-section">[\s\S]*?<\/div>/, 
-                '<div class="download-section" style="display: none;">' +
-                '<span id="downloadStatus">✓ Calculator downloaded and ready for offline use</span>' +
-                '</div>');
-            
-            // Create the complete HTML file with initialization script
-            return `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Advanced Mathematical Calculator</title>
-    <style>
-        ${getAllCSS()}
-    </style>
-</head>
-<body>
-    ${bodyContent}
-    
-    <script>
         // ============================================
-        // INITIALIZATION FOR DOWNLOADED FILE
+        // EXISTING CALCULATOR CODE (UNCHANGED)
         // ============================================
         
-        // Application data from when it was saved
-        const savedAppData = ${JSON.stringify(appData, null, 4)};
-        
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Restoring calculator state...');
+        // Counter for additional calculators
+        let calculatorCount = 2;
+
+        // Function to create a new calculator
+        function createCalculator() {
+            calculatorCount++;
+            const newCalculatorId = calculatorCount;
             
-            // 1. Recreate additional calculators if needed
-            if (savedAppData.calculatorCount > 2) {
-                for (let i = 3; i <= savedAppData.calculatorCount; i++) {
-                    createCalculator(i);
-                }
-            }
-            
-            // 2. Wait a moment for DOM to be ready, then restore data
-            setTimeout(function() {
-                // Restore calculator data
-                savedAppData.calculators.forEach(calc => {
-                    const inputField = document.getElementById('inputField' + calc.id);
-                    const resultField = document.getElementById('resultField' + calc.id);
-                    const notesField = document.getElementById('notesField' + calc.id);
-                    const outputField = document.getElementById('outputField' + calc.id);
-                    
-                    if (inputField) inputField.value = calc.expression || '';
-                    if (resultField) resultField.value = calc.resultName || '';
-                    if (notesField) notesField.value = calc.notes || '';
-                    if (outputField) outputField.textContent = calc.resultValue || '0';
-                });
-                
-                // Restore variable data
-                savedAppData.variables.forEach(variable => {
-                    const nameField = document.getElementById('variableName' + variable.id);
-                    const valueField = document.getElementById('variableValue' + variable.id);
-                    const unitField = document.getElementById('unit' + variable.id);
-                    
-                    if (nameField) nameField.value = variable.name || '';
-                    if (valueField) valueField.value = variable.value || '';
-                    if (unitField) unitField.value = variable.unit || '';
-                });
-                
-                // Restore notes
-                const notesField = document.getElementById('notesField');
-                if (notesField && savedAppData.notes) {
-                    notesField.innerHTML = savedAppData.notes;
-                }
-                
-                // Setup all event listeners
-                setupAllEventListeners();
-                
-                // Perform initial calculations
-                setTimeout(function() {
-                    updateVariables();
-                    evaluateAllCalculators();
-                    console.log('Calculator restored successfully with', 
-                        savedAppData.calculatorCount, 'calculators');
-                }, 200);
-                
-            }, 100);
-        });
-        
-        // Include all the calculator functions
-        ${getAllEssentialFunctions()}
-    <\/script>
-</body>
-</html>`;
-        }
-        
-        // Helper to get all CSS
-        function getAllCSS() {
-            // Extract all CSS from style tags
-            const styles = Array.from(document.querySelectorAll('style'))
-                .map(style => style.innerHTML)
-                .join('\\n');
-            return styles;
-        }
-        
-        // Helper to get essential functions as string
-        function getAllEssentialFunctions() {
-            return `
-            // Core calculator functions
-            let calculatorCount = 2;
-            let savedInputs = {};
-            let variables = {};
-            
-            function saveInput(fieldId) {
-                const element = document.getElementById(fieldId);
-                if (element) {
-                    savedInputs[fieldId] = element.value;
-                    const indicator = document.getElementById('saved_' + fieldId);
-                    if (indicator) {
-                        indicator.style.display = 'inline';
-                        setTimeout(() => { indicator.style.display = 'none'; }, 2000);
-                    }
-                }
-            }
-            
-            function saveNotes() {
-                const notesField = document.getElementById('notesField');
-                if (notesField) {
-                    savedInputs['notesField'] = notesField.innerHTML;
-                    const indicator = document.getElementById('saved_notesField');
-                    if (indicator) {
-                        indicator.style.display = 'inline';
-                        setTimeout(() => { indicator.style.display = 'none'; }, 2000);
-                    }
-                }
-            }
-            
-            function createCalculator(calculatorId) {
-                const calculatorHTML = \`
-                    <div class="calculation-group" id="calculator_\${calculatorId}">
-                        <div class="calculator-header">
-                            <span class="calculator-label">Calc:</span>
-                            <input type="text" class="variable-name-input" id="resultField\${calculatorId}" placeholder="var">
-                            <button class="save-btn" data-field="resultField\${calculatorId}">💾</button>
-                            <span class="saved-indicator" id="saved_resultField\${calculatorId}">✓</span>
-                            <input type="text" class="notes-input" placeholder="Notes" id="notesField\${calculatorId}">
-                            <button class="save-btn" data-field="notesField\${calculatorId}">💾</button>
-                            <span class="saved-indicator" id="saved_notesField\${calculatorId}">✓</span>
-                        </div>
-                        
-                        <input type="text" class="expression-input" id="inputField\${calculatorId}" placeholder="Enter expression">
-                        
-                        <div style="display: flex; align-items: center; margin: 3px 0;">
-                            <button class="save-expr-btn" data-field="inputField\${calculatorId}">💾 Save</button>
-                            <span class="saved-indicator" id="saved_inputField\${calculatorId}">✓ Saved</span>
-                        </div>
-                        
-                        <div class="result-container">
-                            <span class="result-label">Result:</span>
-                            <div class="result-output" id="outputField\${calculatorId}">0</div>
-                        </div>
+            const calculatorHTML = `
+                <div class="calculation-group">
+                    <div class="expression-container">
+                        <label for="inputField${newCalculatorId}"><font size="3"><b><i>Calculator:</i></b></font></label>
+                        <input type="text" class="result-input" id="resultField${newCalculatorId}" placeholder="Result variable name">
+                        <button class="save-btn" onclick="saveInput('resultField${newCalculatorId}')">💾</button>
+                        <span class="saved-indicator" id="saved_resultField${newCalculatorId}">✓</span>
+                        <input type="text" placeholder="Notes" id="notesField${newCalculatorId}">
+                        <button class="save-btn" onclick="saveInput('notesField${newCalculatorId}')">💾</button>
+                        <span class="saved-indicator" id="saved_notesField${newCalculatorId}">✓</span>
                     </div>
-                \`;
-                
-                const container = document.getElementById('calculatorsContainer');
-                const newCalculator = document.createElement('div');
-                newCalculator.innerHTML = calculatorHTML;
-                container.appendChild(newCalculator.firstElementChild);
-                
-                setupCalculatorEvents(calculatorId);
-            }
+                    <div style="display: flex; align-items: center;">
+                        <input type="text" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px; width: 280px;">
+                        <button class="save-btn" onclick="saveInput('inputField${newCalculatorId}')">💾 Save</button>
+                        <span class="saved-indicator" id="saved_inputField${newCalculatorId}">✓ Saved</span>
+                    </div>
+                    <label for="outputField${newCalculatorId}"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
+                    <output id="outputField${newCalculatorId}">0</output>
+                </div>
+            `;
             
-            function setupCalculatorEvents(calculatorId) {
-                const inputField = document.getElementById('inputField' + calculatorId);
-                const outputField = document.getElementById('outputField' + calculatorId);
-                const resultField = document.getElementById('resultField' + calculatorId);
-                
-                if (inputField && outputField && resultField) {
-                    inputField.addEventListener('input', function() {
-                        evaluateExpression(inputField.value, outputField, resultField);
-                    });
-                    
-                    resultField.addEventListener('input', function() {
-                        updateVariables();
-                        evaluateAllCalculators();
-                    });
-                }
-                
-                // Add save button listeners
-                const calculatorElement = document.getElementById('calculator_' + calculatorId);
-                if (calculatorElement) {
-                    calculatorElement.addEventListener('click', function(e) {
-                        if (e.target.classList.contains('save-btn') || e.target.classList.contains('save-expr-btn')) {
-                            const fieldId = e.target.getAttribute('data-field');
-                            if (fieldId) saveInput(fieldId);
-                        }
-                    });
-                }
-            }
+            // Insert the new calculator before the "Add More Calculators" button
+            const container = document.getElementById('calculatorsContainer');
+            const newCalculator = document.createElement('div');
+            newCalculator.innerHTML = calculatorHTML;
+            container.appendChild(newCalculator);
             
-            // Event delegation for save buttons
-            function setupAllEventListeners() {
-                document.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('save-btn') || 
-                        e.target.classList.contains('save-expr-btn') || 
-                        e.target.classList.contains('compact-save-btn')) {
-                        const fieldId = e.target.getAttribute('data-field');
-                        if (fieldId) saveInput(fieldId);
+            // Get references to the new elements
+            const inputField = document.getElementById(`inputField${newCalculatorId}`);
+            const outputField = document.getElementById(`outputField${newCalculatorId}`);
+            const resultField = document.getElementById(`resultField${newCalculatorId}`);
+            
+            // Add event listeners to the new calculator
+            inputField.addEventListener('input', function() {
+                evaluateExpression(inputField.value, outputField, resultField);
+            });
+            
+            resultField.addEventListener('input', function() {
+                updateVariables();
+                evaluateAllCalculators();
+            });
+            
+            // Also add save functionality to the new fields
+            setTimeout(() => {
+                // Ensure the save buttons work
+                const saveBtns = newCalculator.querySelectorAll('.save-btn');
+                saveBtns.forEach(btn => {
+                    if (btn.onclick) {
+                        // Already has onclick from template
+                    } else {
+                        // Add click handler
+                        btn.addEventListener('click', function() {
+                            const fieldId = this.previousElementSibling.id;
+                            saveInput(fieldId);
+                        });
                     }
                 });
-                
-                // Setup calculators 1 and 2
-                setupCalculatorEvents(1);
-                setupCalculatorEvents(2);
-                
-                // Setup variable event listeners
-                for (let i = 1; i <= 10; i++) {
-                    const valueField = document.getElementById('variableValue' + i);
-                    const nameField = document.getElementById('variableName' + i);
-                    if (valueField) {
-                        valueField.addEventListener('input', evaluateAllCalculators);
-                    }
-                    if (nameField) {
-                        nameField.addEventListener('input', evaluateAllCalculators);
-                    }
-                }
-                
-                // Add calculator button
-                const addBtn = document.getElementById('addCalculatorBtn');
-                if (addBtn) {
-                    addBtn.addEventListener('click', function() {
-                        calculatorCount++;
-                        createCalculator(calculatorCount);
-                    });
-                }
-            }
-            
-            // Mathematical functions
-            ${updateVariables.toString()}
-            ${replaceVariables.toString()}
-            ${factorial.toString()}
-            ${toRadians.toString()}
-            ${toDegrees.toString()}
-            ${replaceLogSyntax.toString()}
-            ${replaceTrigFunctions.toString()}
-            ${replaceInverseTrigFunctions.toString()}
-            ${replaceFactorialSyntax.toString()}
-            ${evaluateExpression.toString()}
-            ${evaluateAllCalculators.toString()}
-            
-            // Unit converter functions
-            ${showUnitConverter.toString()}
-            ${closeUnitConverter.toString()}
-            ${convertLength.toString()}
-            ${convertWeight.toString()}
-            ${convertVolume.toString()}
-            ${convertTemperature.toString()}
-            `;
+            }, 100);
         }
-        
-        // ============================================
-        // 3. MATHEMATICAL ENGINE (UNCHANGED)
-        // ============================================
-        
+
+        // Function to evaluate all calculators
+        function evaluateAllCalculators() {
+            for (let i = 1; i <= calculatorCount; i++) {
+                const inputField = document.getElementById(`inputField${i}`);
+                const outputField = document.getElementById(`outputField${i}`);
+                const resultField = document.getElementById(`resultField${i}`);
+                if (inputField && outputField && resultField) {
+                    evaluateExpression(inputField.value, outputField, resultField);
+                }
+            }
+        }
+
+        // Add event listener to the "Add More Calculators" button
+        document.getElementById('addCalculatorBtn').addEventListener('click', createCalculator);
+
+        // Add event listener for the unit converter button
+        document.getElementById('unitConverterBtn').addEventListener('click', function() {
+            // Open unit converter in a new window
+            window.open('unitconverter.html', 'UnitConverter', 'width=800,height=800,scrollbars=yes');
+        });
+
+        // Get references to the input fields and output fields
+        const variableNameInputs = [
+            document.getElementById('variableName1'),
+            document.getElementById('variableName2'),
+            document.getElementById('variableName3'),
+            document.getElementById('variableName4'),
+            document.getElementById('variableName5'),
+            document.getElementById('variableName6'),
+            document.getElementById('variableName7'),
+            document.getElementById('variableName8'),
+            document.getElementById('variableName9'),
+            document.getElementById('variableName10')
+        ];
+
+        const variableValueInputs = [
+            document.getElementById('variableValue1'),
+            document.getElementById('variableValue2'),
+            document.getElementById('variableValue3'),
+            document.getElementById('variableValue4'),
+            document.getElementById('variableValue5'),
+            document.getElementById('variableValue6'),
+            document.getElementById('variableValue7'),
+            document.getElementById('variableValue8'),
+            document.getElementById('variableValue9'),
+            document.getElementById('variableValue10')
+        ];
+
+        const inputField1 = document.getElementById('inputField1');
+        const outputField1 = document.getElementById('outputField1');
+        const resultField1 = document.getElementById('resultField1');
+        const inputField2 = document.getElementById('inputField2');
+        const outputField2 = document.getElementById('outputField2');
+        const resultField2 = document.getElementById('resultField2');
+        const notesField = document.getElementById('notesField');
+
+        // Object to store user-defined variables
+        let variables = {};
+
+        // Function to update variables
         function updateVariables() {
+            // Clear existing variables
             variables = {};
-            
-            // Get variable values
-            for (let i = 1; i <= 10; i++) {
-                const nameField = document.getElementById('variableName' + i);
-                const valueField = document.getElementById('variableValue' + i);
-                if (nameField && valueField) {
-                    const name = nameField.value.trim();
-                    const value = parseFloat(valueField.value.trim());
-                    if (name && !isNaN(value)) {
-                        variables[name] = value;
-                    }
+
+            // Update regular variables
+            for (let i = 0; i < variableNameInputs.length; i++) {
+                const name = variableNameInputs[i].value.trim();
+                const value = parseFloat(variableValueInputs[i].value.trim());
+                if (name && !isNaN(value)) {
+                    variables[name] = value;
                 }
             }
             
-            // Get calculator results as variables
+            // Update result variables from all calculators
             for (let i = 1; i <= calculatorCount; i++) {
-                const resultField = document.getElementById('resultField' + i);
-                const outputField = document.getElementById('outputField' + i);
+                const resultField = document.getElementById(`resultField${i}`);
+                const outputField = document.getElementById(`outputField${i}`);
                 if (resultField && outputField) {
                     const resultName = resultField.value.trim();
                     const resultValue = parseFloat(outputField.textContent);
@@ -701,18 +1114,24 @@
                 }
             }
         }
-        
+
+        // Function to replace variable names and constants with their values
         function replaceVariables(expression) {
-            expression = expression.replace(/\\bpi\\b/g, Math.PI);
-            expression = expression.replace(/\\bg\\b/g, 9.8);
-            
+            // Replace pi with Math.PI
+            expression = expression.replace(/\bpi\b/g, Math.PI);
+
+            // Replace g with 9.8 (acceleration due to gravity)
+            expression = expression.replace(/\bg\b/g, 9.8);
+
+            // Replace variable names with their values
             for (const [name, value] of Object.entries(variables)) {
-                const regex = new RegExp(\`\\\\b\${name}\\\\b\`, 'g');
+                const regex = new RegExp(`\\b${name}\\b`, 'g');
                 expression = expression.replace(regex, value);
             }
             return expression;
         }
-        
+
+        // Function to calculate factorial
         function factorial(n) {
             if (n === 0 || n === 1) return 1;
             let result = 1;
@@ -721,145 +1140,313 @@
             }
             return result;
         }
-        
+
+        // Function to convert degrees to radians
         function toRadians(degrees) {
             return degrees * (Math.PI / 180);
         }
-        
+
+        // Function to convert radians to degrees
         function toDegrees(radians) {
             return radians * (180 / Math.PI);
         }
-        
+
+        // Function to replace logx(y) with the appropriate JavaScript expression
         function replaceLogSyntax(expression) {
-            const logRegex = /log(\\d+|e)\\(([^)]+)\\)/g;
+            // Regular expression to match logx(y) syntax
+            const logRegex = /log(\d+|e)\(([^)]+)\)/g;
             return expression.replace(logRegex, (match, base, y) => {
-                if (base === 'e') return \`Math.log(\${y})\`;
-                else return \`(Math.log(\${y}) / Math.log(\${base}))\`;
+                if (base === 'e') {
+                    // Natural logarithm (base e)
+                    return `Math.log(${y})`;
+                } else {
+                    // Logarithm with custom base using the change of base formula
+                    return `(Math.log(${y}) / Math.log(${base}))`;
+                }
             });
         }
-        
+
+        // Function to replace trigonometric functions with their evaluated values
         function replaceTrigFunctions(expression) {
-            expression = expression.replace(/sin\\(([^)]+)\\)/g, (match, x) => {
-                return \`Math.sin(toRadians(\${x}))\`;
+            // Replace sin(x) with Math.sin(toRadians(x))
+            expression = expression.replace(/sin\(([^)]+)\)/g, (match, x) => {
+                return `Math.sin(toRadians(${x}))`;
             });
-            expression = expression.replace(/cos\\(([^)]+)\\)/g, (match, x) => {
-                return \`Math.cos(toRadians(\${x}))\`;
+            // Replace cos(x) with Math.cos(toRadians(x))
+            expression = expression.replace(/cos\(([^)]+)\)/g, (match, x) => {
+                return `Math.cos(toRadians(${x}))`;
             });
-            expression = expression.replace(/tan\\(([^)]+)\\)/g, (match, x) => {
-                return \`Math.tan(toRadians(\${x}))\`;
+            // Replace tan(x) with Math.tan(toRadians(x))
+            expression = expression.replace(/tan\(([^)]+)\)/g, (match, x) => {
+                return `Math.tan(toRadians(${x}))`;
+            });
+            // Replace cosec(x) with 1 / Math.sin(toRadians(x))
+            expression = expression.replace(/cosec\(([^)]+)\)/g, (match, x) => {
+                return `(1 / Math.sin(toRadians(${x})))`;
+            });
+            // Replace sec(x) with 1 / Math.cos(toRadians(x))
+            expression = expression.replace(/sec\(([^)]+)\)/g, (match, x) => {
+                return `(1 / Math.cos(toRadians(${x})))`;
+            });
+            // Replace cot(x) with 1 / Math.tan(toRadians(x))
+            expression = expression.replace(/cot\(([^)]+)\)/g, (match, x) => {
+                return `(1 / Math.tan(toRadians(${x})))`;
             });
             return expression;
         }
-        
+
+        // Function to replace inverse trigonometric functions with their evaluated values
         function replaceInverseTrigFunctions(expression) {
-            expression = expression.replace(/sin-1\\(([^)]+)\\)/g, (match, x) => {
-                return \`toDegrees(Math.asin(\${x}))\`;
+            // Replace sin-1(x) with toDegrees(Math.asin(x))
+            expression = expression.replace(/sin-1\(([^)]+)\)/g, (match, x) => {
+                return `toDegrees(Math.asin(${x}))`;
             });
-            expression = expression.replace(/cos-1\\(([^)]+)\\)/g, (match, x) => {
-                return \`toDegrees(Math.acos(\${x}))\`;
+            // Replace cos-1(x) with toDegrees(Math.acos(x))
+            expression = expression.replace(/cos-1\(([^)]+)\)/g, (match, x) => {
+                return `toDegrees(Math.acos(${x}))`;
             });
-            expression = expression.replace(/tan-1\\(([^)]+)\\)/g, (match, x) => {
-                return \`toDegrees(Math.atan(\${x}))\`;
+            // Replace tan-1(x) with toDegrees(Math.atan(x))
+            expression = expression.replace(/tan-1\(([^)]+)\)/g, (match, x) => {
+                return `toDegrees(Math.atan(${x}))`;
+            });
+            // Replace cosec-1(x) with toDegrees(Math.asin(1 / x))
+            expression = expression.replace(/cosec-1\(([^)]+)\)/g, (match, x) => {
+                return `toDegrees(Math.asin(1 / ${x}))`;
+            });
+            // Replace sec-1(x) with toDegrees(Math.acos(1 / x))
+            expression = expression.replace(/sec-1\(([^)]+)\)/g, (match, x) => {
+                return `toDegrees(Math.acos(1 / ${x}))`;
+            });
+            // Replace cot-1(x) with toDegrees(Math.atan(1 / x))
+            expression = expression.replace(/cot-1\(([^)]+)\)/g, (match, x) => {
+                return `toDegrees(Math.atan(1 / ${x}))`;
             });
             return expression;
         }
-        
+
+        // Function to replace factorial syntax (x!) with the factorial function call
         function replaceFactorialSyntax(expression) {
-            const factorialRegex = /(\\d+)!/g;
+            // Regular expression to match x! syntax
+            const factorialRegex = /(\d+)!/g;
             return expression.replace(factorialRegex, (match, x) => {
-                return \`factorial(\${x})\`;
+                return `factorial(${x})`;
             });
         }
-        
+
+        // Function to evaluate a mathematical expression
         function evaluateExpression(expression, outputField, resultField) {
             try {
+                // Update variables when the calculation input changes
                 updateVariables();
+
+                // Replace variable names and constants with their values
                 expression = replaceVariables(expression);
-                expression = expression.replace(/\\^/g, '**');
-                expression = expression.replace(/\\be\\b/g, Math.E);
+
+                // Replace the ^ symbol with ** for exponentiation
+                expression = expression.replace(/\^/g, '**');
+                // Replace the letter 'e' with Math.E (Euler's constant)
+                expression = expression.replace(/\be\b/g, Math.E);
+                // Replace logx(y) syntax with the appropriate JavaScript expression
                 expression = replaceLogSyntax(expression);
+                // Replace trigonometric functions with their evaluated values
                 expression = replaceTrigFunctions(expression);
+                // Replace inverse trigonometric functions with their evaluated values
                 expression = replaceInverseTrigFunctions(expression);
+                // Replace factorial syntax (x!) with the factorial function call
                 expression = replaceFactorialSyntax(expression);
+                // Evaluate the mathematical expression
                 const result = eval(expression);
+                // Update the output field with the result
                 outputField.textContent = result;
+                
+                // If the result field has a name, update variables with the new value
                 updateVariables();
             } catch (error) {
-                outputField.textContent = 'Error';
+                // If there's an error (e.g., invalid input), display an error message
+                outputField.textContent = 'Invalid Expression';
             }
         }
+
+        // Add event listeners to the input fields
+        inputField1.addEventListener('input', function () {
+            evaluateExpression(inputField1.value, outputField1, resultField1);
+        });
+
+        inputField2.addEventListener('input', function () {
+            evaluateExpression(inputField2.value, outputField2, resultField2);
+        });
+
+        // Add event listeners to all variable value fields
+        variableValueInputs.forEach(input => {
+            input.addEventListener('input', function () {
+                // Re-evaluate all calculators when a variable value changes
+                evaluateAllCalculators();
+            });
+        });
         
-        function evaluateAllCalculators() {
-            for (let i = 1; i <= calculatorCount; i++) {
-                const inputField = document.getElementById('inputField' + i);
-                const outputField = document.getElementById('outputField' + i);
-                const resultField = document.getElementById('resultField' + i);
-                if (inputField && outputField && resultField) {
-                    evaluateExpression(inputField.value, outputField, resultField);
-                }
-            }
-        }
+        // Add event listeners to all variable name fields too
+        variableNameInputs.forEach(input => {
+            input.addEventListener('input', function () {
+                // Re-evaluate all calculators when a variable name changes
+                evaluateAllCalculators();
+            });
+        });
         
-        // ============================================
-        // 4. UNIT CONVERTER FUNCTIONS
-        // ============================================
+        // Add event listeners to result fields to update variables when they change
+        resultField1.addEventListener('input', function() {
+            updateVariables();
+            evaluateAllCalculators();
+        });
         
+        resultField2.addEventListener('input', function() {
+            updateVariables();
+            evaluateAllCalculators();
+        });
+
+
+        // Unit Converter Functions
         function showUnitConverter() {
             document.getElementById('unitConverterModal').style.display = 'block';
         }
-        
+
         function closeUnitConverter() {
             document.getElementById('unitConverterModal').style.display = 'none';
         }
-        
-        // Simple conversion functions (kept brief)
+
+        // Length conversion factors (to meters)
+        const lengthFactors = {
+            pm: 1e-12, nm: 1e-9, μm: 1e-6, mm: 0.001, cm: 0.01, 
+            dm: 0.1, m: 1, dam: 10, hm: 100, km: 1000,
+            in: 0.0254, ft: 0.3048, yd: 0.9144, mi: 1609.344,
+            nmi: 1852, ly: 9.461e+15, au: 1.496e+11, pc: 3.086e+16
+        };
+
+        // Weight conversion factors (to kilograms)
+        const weightFactors = {
+            μg: 1e-9, mg: 0.000001, cg: 0.00001, dg: 0.0001,
+            g: 0.001, dag: 0.01, hg: 0.1, kg: 1, t: 1000,
+            oz: 0.0283495, lb: 0.453592, st: 6.35029,
+            ust: 907.185, ukt: 1016.05
+        };
+
+        // Volume conversion factors (to liters)
+        const volumeFactors = {
+            μl: 0.000001, ml: 0.001, cl: 0.01, dl: 0.1,
+            l: 1, dal: 10, hl: 100, kl: 1000, m3: 1000,
+            tsp: 0.00492892, tbsp: 0.0147868, floz: 0.0295735,
+            cup: 0.236588, pt: 0.473176, qt: 0.946353,
+            gal: 3.78541, in3: 0.0163871, ft3: 28.3168, yd3: 764.555
+        };
+
+        // Area conversion factors (to square meters)
+        const areaFactors = {
+            mm2: 0.000001, cm2: 0.0001, m2: 1, ha: 10000,
+            km2: 1000000, in2: 0.00064516, ft2: 0.092903,
+            yd2: 0.836127, ac: 4046.86, mi2: 2589988.11
+        };
+
+        // Pressure conversion factors (to pascals)
+        const pressureFactors = {
+            pa: 1, kpa: 1000, mpa: 1000000, bar: 100000,
+            mbar: 100, atm: 101325, mmhg: 133.322,
+            inhg: 3386.39, psi: 6894.76, psf: 47.8803
+        };
+
+        // Flow conversion factors (to liters per second)
+        const flowFactors = {
+            lps: 1, lpm: 1/60, lph: 1/3600, m3ps: 1000,
+            m3pm: 1000/60, m3ph: 1000/3600, mlps: 0.001,
+            mlpm: 0.001/60, mlph: 0.001/3600, gps: 3.78541,
+            gpm: 3.78541/60, gph: 3.78541/3600, cfm: 28.3168/60,
+            cfh: 28.3168/3600
+        };
+
+        // Energy conversion factors (to joules)
+        const energyFactors = {
+            j: 1, kj: 1000, mj: 1000000, cal: 4.184,
+            kcal: 4184, wh: 3600, kwh: 3600000,
+            mwh: 3600000000, btu: 1055.06, mmbtu: 1055056000,
+            ftlb: 1.35582, ev: 1.60218e-19, kev: 1.60218e-16,
+            mev: 1.60218e-13, gev: 1.60218e-10, tep: 41868000000,
+            tce: 29307600000
+        };
+
         function convertLength() {
             const value = parseFloat(document.getElementById('length-value').value);
             const fromUnit = document.getElementById('length-from').value;
             const toUnit = document.getElementById('length-to').value;
-            const factors = { mm: 0.001, cm: 0.01, m: 1, km: 1000 };
-            if (!isNaN(value)) {
-                const meters = value * factors[fromUnit];
-                const result = meters / factors[toUnit];
-                document.getElementById('length-result').textContent = result.toFixed(6);
+            
+            if (isNaN(value)) {
+                document.getElementById('length-result').textContent = 'Invalid input';
+                return;
             }
+            
+            const meters = value * lengthFactors[fromUnit];
+            const result = meters / lengthFactors[toUnit];
+            document.getElementById('length-result').textContent = result.toFixed(6);
         }
-        
+
         function convertWeight() {
             const value = parseFloat(document.getElementById('weight-value').value);
             const fromUnit = document.getElementById('weight-from').value;
             const toUnit = document.getElementById('weight-to').value;
-            const factors = { g: 0.001, kg: 1, oz: 0.0283495, lb: 0.453592 };
-            if (!isNaN(value)) {
-                const kg = value * factors[fromUnit];
-                const result = kg / factors[toUnit];
-                document.getElementById('weight-result').textContent = result.toFixed(6);
+            
+            if (isNaN(value)) {
+                document.getElementById('weight-result').textContent = 'Invalid input';
+                return;
             }
+            
+            const kg = value * weightFactors[fromUnit];
+            const result = kg / weightFactors[toUnit];
+            document.getElementById('weight-result').textContent = result.toFixed(6);
         }
-        
+
         function convertVolume() {
             const value = parseFloat(document.getElementById('volume-value').value);
             const fromUnit = document.getElementById('volume-from').value;
             const toUnit = document.getElementById('volume-to').value;
-            const factors = { ml: 0.001, l: 1, gal: 3.78541 };
-            if (!isNaN(value)) {
-                const liters = value * factors[fromUnit];
-                const result = liters / factors[toUnit];
-                document.getElementById('volume-result').textContent = result.toFixed(6);
+            
+            if (isNaN(value)) {
+                document.getElementById('volume-result').textContent = 'Invalid input';
+                return;
             }
+            
+            const liters = value * volumeFactors[fromUnit];
+            const result = liters / volumeFactors[toUnit];
+            document.getElementById('volume-result').textContent = result.toFixed(6);
         }
-        
+
+        function convertArea() {
+            const value = parseFloat(document.getElementById('area-value').value);
+            const fromUnit = document.getElementById('area-from').value;
+            const toUnit = document.getElementById('area-to').value;
+            
+            if (isNaN(value)) {
+                document.getElementById('area-result').textContent = 'Invalid input';
+                return;
+            }
+            
+            const m2 = value * areaFactors[fromUnit];
+            const result = m2 / areaFactors[toUnit];
+            document.getElementById('area-result').textContent = result.toFixed(6);
+        }
+
         function convertTemperature() {
             const value = parseFloat(document.getElementById('temp-value').value);
             const fromUnit = document.getElementById('temp-from').value;
             const toUnit = document.getElementById('temp-to').value;
-            if (isNaN(value)) return;
+            
+            if (isNaN(value)) {
+                document.getElementById('temp-result').textContent = 'Invalid input';
+                return;
+            }
             
             let celsius;
             switch(fromUnit) {
                 case 'c': celsius = value; break;
                 case 'f': celsius = (value - 32) * 5/9; break;
                 case 'k': celsius = value - 273.15; break;
+                case 'r': celsius = (value - 491.67) * 5/9; break;
             }
             
             let result;
@@ -867,70 +1454,87 @@
                 case 'c': result = celsius; break;
                 case 'f': result = celsius * 9/5 + 32; break;
                 case 'k': result = celsius + 273.15; break;
+                case 'r': result = (celsius + 273.15) * 9/5; break;
             }
             
             document.getElementById('temp-result').textContent = result.toFixed(6);
         }
-        
-        // ============================================
-        // 5. INITIALIZATION
-        // ============================================
-        
-        // Setup event listeners for save buttons (event delegation)
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('save-btn') || 
-                e.target.classList.contains('save-expr-btn') || 
-                e.target.classList.contains('compact-save-btn')) {
-                const fieldId = e.target.getAttribute('data-field');
-                if (fieldId) {
-                    saveInput(fieldId);
-                }
+
+        function convertPressure() {
+            const value = parseFloat(document.getElementById('pressure-value').value);
+            const fromUnit = document.getElementById('pressure-from').value;
+            const toUnit = document.getElementById('pressure-to').value;
+            
+            if (isNaN(value)) {
+                document.getElementById('pressure-result').textContent = 'Invalid input';
+                return;
             }
-        });
-        
-        // Setup calculators 1 and 2
-        setupCalculatorEvents(1);
-        setupCalculatorEvents(2);
-        
-        // Setup variable event listeners
-        for (let i = 1; i <= 10; i++) {
-            const valueField = document.getElementById('variableValue' + i);
-            const nameField = document.getElementById('variableName' + i);
-            if (valueField) {
-                valueField.addEventListener('input', evaluateAllCalculators);
-            }
-            if (nameField) {
-                nameField.addEventListener('input', evaluateAllCalculators);
-            }
+            
+            const pascals = value * pressureFactors[fromUnit];
+            const result = pascals / pressureFactors[toUnit];
+            document.getElementById('pressure-result').textContent = result.toFixed(6);
         }
-        
-        // PWA Installation
-        let deferredPrompt;
-        window.addEventListener("beforeinstallprompt", (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById("installApp").style.display = "block";
-            document.getElementById("installApp").addEventListener("click", () => {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === "accepted") console.log("App Installed");
-                    deferredPrompt = null;
-                });
-            });
-        });
-        
-        // Service Worker
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("service-worker.js").then(() => {
-                console.log("Service Worker Registered!");
-            });
+
+        function convertFlow() {
+            const value = parseFloat(document.getElementById('flow-value').value);
+            const fromUnit = document.getElementById('flow-from').value;
+            const toUnit = document.getElementById('flow-to').value;
+            
+            if (isNaN(value)) {
+                document.getElementById('flow-result').textContent = 'Invalid input';
+                return;
+            }
+            
+            const lps = value * flowFactors[fromUnit];
+            const result = lps / flowFactors[toUnit];
+            document.getElementById('flow-result').textContent = result.toFixed(6);
         }
-        
-        // Initial calculation
-        setTimeout(function() {
-            updateVariables();
-            evaluateAllCalculators();
-        }, 100);
+
+        function convertEnergy() {
+            const value = parseFloat(document.getElementById('energy-value').value);
+            const fromUnit = document.getElementById('energy-from').value;
+            const toUnit = document.getElementById('energy-to').value;
+            
+            if (isNaN(value)) {
+                document.getElementById('energy-result').textContent = 'Invalid input';
+                return;
+            }
+            
+            const joules = value * energyFactors[fromUnit];
+            const result = joules / energyFactors[toUnit];
+            document.getElementById('energy-result').textContent = result.toFixed(6);
+        }
+
+
     </script>
+
+<script>
+let deferredPrompt;
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById("installApp").style.display = "block";
+    
+    document.getElementById("installApp").addEventListener("click", () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+                console.log("App Installed");
+            }
+            deferredPrompt = null;
+        });
+    });
+});
+</script>
+    <script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").then(() => {
+        console.log("Service Worker Registered!");
+    });
+}
+</script>
+
+    
 </body>
 </html>
+
