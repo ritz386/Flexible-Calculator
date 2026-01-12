@@ -11,955 +11,456 @@
      crossorigin="anonymous"></script>
     
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f7fa;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 20px;
+            font-size: 9px;
         }
-        
-        /* Main content container - centered with space for ads */
-        .main-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        @media (min-width: 1024px) {
-            .main-container {
-                grid-template-columns: 200px 1fr 200px;
-                gap: 30px;
-            }
-        }
-        
-        /* Ad containers */
-        .ad-sidebar {
-            display: none;
-        }
-        
-        @media (min-width: 1024px) {
-            .ad-sidebar {
-                display: block;
-                min-height: 600px;
-                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-                border-radius: 10px;
-                border: 1px solid #dee2e6;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #6c757d;
-                font-size: 14px;
-                text-align: center;
-                padding: 20px;
-            }
-        }
-        
-        /* Content area */
-        .content-area {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            width: 100%;
-        }
-        
-        /* Header styles */
-        .app-header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e9ecef;
-        }
-        
-        .app-header img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 15px;
-        }
-        
-        .app-title {
-            font-size: 16px;
-            color: #495057;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        
-        .app-subtitle {
-            font-size: 13px;
-            color: #6c757d;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-        
-        /* Export controls */
-        .export-controls {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 25px;
-            text-align: center;
-            border: 1px solid #90caf9;
-        }
-        
-        .download-btn {
-            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(33, 150, 243, 0.2);
-        }
-        
-        .download-btn:hover {
-            background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(33, 150, 243, 0.3);
-        }
-        
-        #downloadStatus {
+        input, output, textarea {
             display: block;
-            margin-top: 10px;
-            color: #1976D2;
-            font-size: 12px;
-            font-weight: 500;
+            margin: 0 px 0;
+            padding: 5px;
+            width: 300px;
+            font-size: 11px;
         }
-        
-        /* Calculator containers */
-        .calculators-container {
-            margin-bottom: 30px;
+        output {
+            border: 1px solid #ccc;
+            width: 300 px;
+            height: 15px;         
         }
-        
+        .notes-field {
+            width: 350px;
+            height: 100px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            font-size: 10px;
+            resize: vertical;
+            overflow: auto;
+        }
+        .variable-input {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 1px;
+        }
+        .variable-input input {
+            width: 80px;
+        }
         .calculation-group {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
+            margin-bottom: 10px;
         }
-        
-        .calculation-group:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-color: #dee2e6;
-        }
-        
         .expression-container {
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
             gap: 10px;
-            margin-bottom: 15px;
         }
-        
-        .calc-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #2c3e50;
-            min-width: 80px;
-        }
-        
         .result-input {
-            flex: 1;
-            min-width: 120px;
-            height: 36px;
-            font-size: 13px;
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            background: white;
-            transition: all 0.3s ease;
+            width: 120px;
+            height: 20px;
+            font-size: 12px;
         }
-        
-        .result-input:focus {
-            outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-        }
-        
-        .notes-input {
-            flex: 2;
-            min-width: 150px;
-            height: 36px;
-            font-size: 13px;
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            background: white;
-        }
-        
-        /* Input fields */
-        .calc-input-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .calc-input {
-            flex: 1;
-            min-width: 250px;
-            height: 40px;
-            font-size: 14px;
-            padding: 8px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            background: white;
-            transition: all 0.3s ease;
-        }
-        
-        .calc-input:focus {
-            outline: none;
-            border-color: #2196F3;
-            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
-        }
-        
-        .syntax-hint {
-            font-size: 11px;
-            color: #6c757d;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border-left: 3px solid #4CAF50;
-        }
-        
-        .syntax-hint b {
-            color: #2c3e50;
-        }
-        
-        /* Output fields */
-        .result-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        
-        .result-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #FF0000;
-        }
-        
-        output {
-            flex: 1;
-            height: 40px;
-            font-size: 15px;
-            font-weight: 600;
-            padding: 8px 15px;
-            border: 2px solid #dc3545;
-            border-radius: 8px;
-            background: white;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            min-width: 150px;
-        }
-        
-        /* Save buttons */
-        .save-btn {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .save-btn:hover {
-            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
-            transform: translateY(-1px);
-        }
-        
-        .saved-indicator {
-            color: #4CAF50;
-            font-size: 11px;
-            font-weight: 500;
-            padding: 4px 8px;
-            background: #e8f5e9;
-            border-radius: 4px;
-            display: none;
-        }
-        
-        /* Add calculator button */
         #addCalculatorBtn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+            margin: 2px 0;
+            padding: 8px 16px;
+            background-color: #45a049;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 10px 0 25px 0;
-            transition: all 0.3s ease;
         }
-        
         #addCalculatorBtn:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+            background-color: #45a049;
         }
-        
-        /* Variable inputs section */
-        .variables-section {
-            margin: 30px 0;
-            padding: 25px;
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-            border-radius: 12px;
-            border: 1px solid #ffd166;
+        /* Save button styles */
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-left: 5px;
         }
-        
-        .section-header {
-            font-size: 16px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ffd166;
+        .save-btn:hover {
+            background-color: #45a049;
         }
-        
-        .unit-converter-btn {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        .download-btn {
+            background-color: #2196F3;
             color: white;
             border: none;
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            margin-left: 15px;
-            transition: all 0.3s ease;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .download-btn:hover {
+            background-color: #1976D2;
+        }
+        /* Save status indicator */
+        .saved-indicator {
+            color: #4CAF50;
+            font-size: 10px;
+            margin-left: 5px;
+            display: none;
         }
         
-        .unit-converter-btn:hover {
-            background: linear-gradient(135deg, #2980b9 0%, #1f639e 100%);
-            transform: translateY(-1px);
-        }
-        
-        .variable-input {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .variable-name-input {
-            width: 70px;
-            height: 36px;
-            font-size: 13px;
-            padding: 8px;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            background: white;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .variable-value-input {
-            width: 100px;
-            height: 36px;
-            font-size: 13px;
-            padding: 8px;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            background: white;
-        }
-        
-        .unit-input {
-            width: 80px;
-            height: 36px;
-            font-size: 13px;
-            padding: 8px;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            background: white;
-        }
-        
-        .variable-info {
-            font-size: 11px;
-            color: #2c3e50;
-            line-height: 1.4;
-            margin-left: 15px;
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        /* Notes field */
-        .notes-section {
-            margin: 25px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 1px solid #e9ecef;
-        }
-        
-        .notes-field {
-            width: 100%;
-            min-height: 120px;
-            font-size: 13px;
-            padding: 15px;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            background: white;
-            resize: vertical;
-            margin-top: 10px;
-            line-height: 1.5;
-        }
-        
-        .notes-save-btn {
-            margin-top: 10px;
-            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
-        }
-        
-        .notes-save-btn:hover {
-            background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
-        }
-        
-        /* Unit converter modal */
+         /* Unit Converter Modal Styles */
         #unitConverterModal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
+            width: 120%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
             z-index: 1000;
             overflow: auto;
         }
-        
         #unitConverterContent {
             background-color: #FFFFFF;
-            margin: 20px auto;
-            padding: 25px;
-            border-radius: 12px;
-            width: 95%;
-            max-width: 900px;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        
         #closeUnitConverter {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #dc3545;
+            top: 2px;
+            right: 5px;
+            background: #000000;
             color: white;
             border: none;
-            border-radius: 50%;
+            border-radius: 100%;
             width: 30px;
             height: 30px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 16px;
         }
-        
         .converter-section {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 1px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 1.3em;
         }
-        
         .converter-section h2 {
             margin-top: 0;
-            color: #2c3e50;
-            font-size: 18px;
-            border-bottom: 2px solid #e9ecef;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            color: #000000;
+            font-size: 1.5em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 2px;
         }
-        
         .converter-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
         }
-        
         .input-group {
             display: flex;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 8px;
+
         }
-        
         .input-group input[type="number"] {
-            padding: 10px;
-            width: 140px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 6px;
+            width: 120px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+           font-size: 1.3em;
         }
-        
         .input-group select {
-            padding: 10px;
-            min-width: 180px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 6px;
+            min-width: 150px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             background-color: white;
-            font-size: 14px;
         }
-        
         .input-group button {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            padding: 6px 12px;
+            background-color: #000000;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 0.7em;
         }
-        
         .input-group button:hover {
-            background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+            background-color: #2980b9;
         }
-        
         .result {
             font-weight: bold;
             color: #2c3e50;
-            font-size: 16px;
-            padding: 10px 15px;
-            background: #e8f5e9;
-            border-radius: 8px;
-            min-width: 150px;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .main-container {
-                padding: 10px;
-            }
-            
-            .content-area {
-                padding: 15px;
-            }
-            
-            .expression-container {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-            
-            .calc-label {
-                min-width: 100%;
-                margin-bottom: 5px;
-            }
-            
-            .result-input,
-            .notes-input,
-            .calc-input {
-                min-width: 100%;
-            }
-            
-            .variable-input {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            
-            .variable-name-input,
-            .variable-value-input,
-            .unit-input {
-                width: 100%;
-            }
-            
-            .variable-info {
-                margin-left: 0;
-                margin-top: 5px;
-            }
-            
-            .input-group {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .input-group input[type="number"],
-            .input-group select {
-                width: 100%;
-            }
-        }
-        
-        /* Footer */
-        .app-footer {
-            text-align: center;
-            margin-top: 30px;
-            padding: 20px;
-            color: #6c757d;
-            font-size: 12px;
-            border-top: 1px solid #e9ecef;
-            width: 100%;
-        }
-        
-        /* Install app button */
-        #installApp {
-            display: none;
-            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            margin: 10px auto;
-            transition: all 0.3s ease;
-        }
-        
-        #installApp:hover {
-            background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%);
-            transform: translateY(-1px);
+            margin-left: 11px;
+             font-size: 1.5em;
+
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <!-- Left Ad Sidebar (Desktop only) -->
-        <div class="ad-sidebar left-sidebar">
-            <div>Advertisement Space<br>(300x600)</div>
+    <!-- Export Controls -->
+    <div style="margin-bottom: 15px; padding: 10px; background-color: #f5f5f5; border-radius: 5px;">
+        <button class="download-btn" onclick="downloadAsHTML()">⬇️ Download Calculator as HTML</button>
+        <span id="downloadStatus" style="margin-left: 10px; color: #666; font-size: 11px;"></span>
+    </div>
+    
+    <img src="title.jpg" alt="Math Tool Box">
+<br>
+    <font size="3"><i>for scientific, engineering, and day-to-day calculations </i> <font size="5"><b>&#9881</b></font><font size="5"><b>&#9787</b></font><font size="5"><b>&#9786</b></font></font><br>
+
+    <button id="installApp" style="display: none;">Install App</button>
+    
+<br> <font size="2">Example equations: <i><b>PV = nRT</b></i> (ideal gas law), <i><b>Net present value = Rt/(1+i)^t</b></i>, etc.</font>
+   
+    <br>
+ 
+   
+    <!-- Container for all calculators -->
+    <div id="calculatorsContainer">
+        <!-- First Calculation Group -->
+        <div class="calculation-group">
+            <div class="expression-container">
+                <label for="inputField1"><font size="3"><b><i>Calculator:</i></b></font></label>
+                <input type="text" class="result-input" id="resultField1" placeholder="variable name (e.g. P)">
+                <button class="save-btn" onclick="saveInput('resultField1')">💾</button>
+                <span class="saved-indicator" id="saved_resultField1">✓</span>
+                 <input type="text" placeholder="Notes (e.g. P means pressure)" id="notesField1">
+                 <button class="save-btn" onclick="saveInput('notesField1')">💾</button>
+                <span class="saved-indicator" id="saved_notesField1">✓</span>
+            </div>         
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="inputField1" placeholder="a function (e.g. n*R*T/V)" style="height: 30px; width: 280px;">
+                <button class="save-btn" onclick="saveInput('inputField1')">💾 Save</button>
+                <span class="saved-indicator" id="saved_inputField1">✓ Saved</span>
+            </div>
+            <font color="#808080" size="2">syntax: for log use <b>logx(y)</b> where x is the base, <b>pi = 3.14159</b>, <b>e = 2.718</b><br> <b>sin-1(x)</b> returns sin inverse of x, <b>angles in degrees in trigonometric calculations</b></font>
+            <br>
+            <label for="outputField1"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
+            <output id="outputField1">0</output>   
         </div>
-        
-        <!-- Main Content Area -->
-        <div class="content-area">
-            <!-- Export Controls -->
-            <div class="export-controls">
-                <button class="download-btn" onclick="downloadAsHTML()">⬇️ Download Calculator as HTML</button>
-                <span id="downloadStatus"></span>
+
+        <!-- Second Calculation Group -->
+        <div class="calculation-group">
+            <div class="expression-container">
+                <label for="inputField2"><font size="3"><b><i>Calculator:</i></b></font></label>
+                <input type="text" class="result-input" id="resultField2" placeholder="variable name">
+                <button class="save-btn" onclick="saveInput('resultField2')">💾</button>
+                <span class="saved-indicator" id="saved_resultField2">✓</span>
+                <input type="text" placeholder="Notes" id="notesField2">
+                <button class="save-btn" onclick="saveInput('notesField2')">💾</button>
+                <span class="saved-indicator" id="saved_notesField2">✓</span>
             </div>
-            
-            <!-- App Header -->
-            <div class="app-header">
-                <img src="title.jpg" alt="Math Tool Box">
-                <div class="app-title">
-                    <i>for scientific, engineering, and day-to-day calculations</i>
-                    <span style="font-size: 18px;">&#9881;</span>
-                    <span style="font-size: 18px;">&#9787;</span>
-                    <span style="font-size: 18px;">&#9786;</span>
-                </div>
-                
-                <button id="installApp" style="display: none;">Install App</button>
-                
-                <div class="app-subtitle">
-                    Example equations: <i><b>PV = nRT</b></i> (ideal gas law), <i><b>Net present value = Rt/(1+i)^t</b></i>, etc.
-                </div>
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px; width: 280px;">
+                <button class="save-btn" onclick="saveInput('inputField2')">💾 Save</button>
+                <span class="saved-indicator" id="saved_inputField2">✓ Saved</span>
             </div>
-            
-            <!-- Container for all calculators -->
-            <div id="calculatorsContainer" class="calculators-container">
-                <!-- First Calculation Group -->
-                <div class="calculation-group">
-                    <div class="expression-container">
-                        <label class="calc-label">Calculator:</label>
-                        <input type="text" class="result-input" id="resultField1" placeholder="variable name (e.g. P)">
-                        <button class="save-btn" onclick="saveInput('resultField1')">💾 Save</button>
-                        <span class="saved-indicator" id="saved_resultField1">✓ Saved</span>
-                        <input type="text" class="notes-input" placeholder="Notes (e.g. P means pressure)" id="notesField1">
-                        <button class="save-btn" onclick="saveInput('notesField1')">💾 Save</button>
-                        <span class="saved-indicator" id="saved_notesField1">✓ Saved</span>
-                    </div>
-                    
-                    <div class="calc-input-container">
-                        <input type="text" class="calc-input" id="inputField1" placeholder="a function (e.g. n*R*T/V)">
-                        <button class="save-btn" onclick="saveInput('inputField1')">💾 Save Expression</button>
-                        <span class="saved-indicator" id="saved_inputField1">✓ Saved</span>
-                    </div>
-                    
-                    <div class="syntax-hint">
-                        <b>Syntax:</b> for log use <b>logx(y)</b> where x is the base, <b>pi = 3.14159</b>, <b>e = 2.718</b><br>
-                        <b>sin-1(x)</b> returns sin inverse of x, <b>angles in degrees in trigonometric calculations</b>
-                    </div>
-                    
-                    <div class="result-container">
-                        <label class="result-label">Result:</label>
-                        <output id="outputField1">0</output>
-                    </div>
-                </div>
-
-                <!-- Second Calculation Group -->
-                <div class="calculation-group">
-                    <div class="expression-container">
-                        <label class="calc-label">Calculator:</label>
-                        <input type="text" class="result-input" id="resultField2" placeholder="variable name">
-                        <button class="save-btn" onclick="saveInput('resultField2')">💾 Save</button>
-                        <span class="saved-indicator" id="saved_resultField2">✓ Saved</span>
-                        <input type="text" class="notes-input" placeholder="Notes" id="notesField2">
-                        <button class="save-btn" onclick="saveInput('notesField2')">💾 Save</button>
-                        <span class="saved-indicator" id="saved_notesField2">✓ Saved</span>
-                    </div>
-                    
-                    <div class="calc-input-container">
-                        <input type="text" class="calc-input" id="inputField2" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g">
-                        <button class="save-btn" onclick="saveInput('inputField2')">💾 Save Expression</button>
-                        <span class="saved-indicator" id="saved_inputField2">✓ Saved</span>
-                    </div>
-                    
-                    <div class="result-container">
-                        <label class="result-label">Result:</label>
-                        <output id="outputField2">0</output>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Add Calculator Button -->
-            <button id="addCalculatorBtn">➕ Add More Calculators</button>
-            
-            <div class="app-subtitle" style="text-align: center; margin: 15px 0;">
-                List of equations: chemistry, physics, statistics, engineering, economics. (to be updated)
-            </div>
-
-            <!-- Variable Input Fields Section -->
-            <div class="variables-section">
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                    <div class="section-header">
-                        Enter variable names and values with <span style="color: #FF0000;">consistent units</span>
-                    </div>
-                    <button onclick="showUnitConverter()" class="unit-converter-btn">📐 Unit Converter</button>
-                </div>
-
-                <!-- Variable Input Fields -->
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName1" placeholder="V">
-                    <button class="save-btn" onclick="saveInput('variableName1')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName1">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue1" placeholder="value (e.g., 10)">
-                    <button class="save-btn" onclick="saveInput('variableValue1')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue1">✓</span>
-                    <input type="text" class="unit-input" id="unit1" placeholder="unit">
-                    <button class="save-btn" onclick="saveInput('unit1')">💾</button>
-                    <span class="saved-indicator" id="saved_unit1">✓</span>
-                    <div class="variable-info">
-                        The 7 SI units: Second (s, time), metre (m, length), kilogram (kg, mass),
-                        ampere (A, electric current), kelvin (K, thermodynamic temperature),
-                        mole (mol, amount of substance), and candela (cd, luminous intensity).
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName2" placeholder="n">
-                    <button class="save-btn" onclick="saveInput('variableName2')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName2">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue2" placeholder="value (e.g., 2)">
-                    <button class="save-btn" onclick="saveInput('variableValue2')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue2">✓</span>
-                    <input type="text" class="unit-input" id="unit2" placeholder="unit">
-                    <button class="save-btn" onclick="saveInput('unit2')">💾</button>
-                    <span class="saved-indicator" id="saved_unit2">✓</span>
-                    <div class="variable-info">
-                        1 mile = 1760 yards (1.6093 km)<br>
-                        1 yard = 3 feet<br>
-                        1 furlong = 220 yard (201.168 meter)
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName3" placeholder="R">
-                    <button class="save-btn" onclick="saveInput('variableName3')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName3">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue3" placeholder="value (e.g., 8.314)">
-                    <button class="save-btn" onclick="saveInput('variableValue3')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue3">✓</span>
-                    <input type="text" class="unit-input" id="unit3" placeholder="unit">
-                    <button class="save-btn" onclick="saveInput('unit3')">💾</button>
-                    <span class="saved-indicator" id="saved_unit3">✓</span>
-                    <div class="variable-info">
-                        1 foot (feet) = 12 inch<br>
-                        1 inch = 2.54 cm<br>
-                        1 foot (feet) = 30.48 cm
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName4" placeholder="T">
-                    <button class="save-btn" onclick="saveInput('variableName4')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName4">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue4" placeholder="value (e.g., 300)">
-                    <button class="save-btn" onclick="saveInput('variableValue4')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue4">✓</span>
-                    <input type="text" class="unit-input" id="unit4" placeholder="unit">
-                    <button class="save-btn" onclick="saveInput('unit4')">💾</button>
-                    <span class="saved-indicator" id="saved_unit4">✓</span>
-                    <div class="variable-info">
-                        1 hector = 10000 m² = 107639.147 sqft<br>
-                        1 m² = 10.7639 sqft<br>
-                        1 hector = 2.471 acre, 1 acre = 43,560 sqft
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName5" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableName5')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName5">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue5" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableValue5')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue5">✓</span>
-                    <input type="text" class="unit-input" id="unit5" placeholder="">
-                    <button class="save-btn" onclick="saveInput('unit5')">💾</button>
-                    <span class="saved-indicator" id="saved_unit5">✓</span>
-                    <div class="variable-info">
-                        1 metric ton = 1000 kg<br>
-                        1 ton (US) = 2000 pound (907.18 kg)<br>
-                        1 pound = 16 ounce
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName6" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableName6')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName6">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue6" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableValue6')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue6">✓</span>
-                    <input type="text" class="unit-input" id="unit6" placeholder="">
-                    <button class="save-btn" onclick="saveInput('unit6')">💾</button>
-                    <span class="saved-indicator" id="saved_unit6">✓</span>
-                    <div class="variable-info">
-                        1 pound = 453.592 gm = 0.4536 kg<br>
-                        1 ounce = 28.3495 gm<br>
-                        1 kg = 2.2046 pound
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName7" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableName7')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName7">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue7" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableValue7')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue7">✓</span>
-                    <input type="text" class="unit-input" id="unit7" placeholder="">
-                    <button class="save-btn" onclick="saveInput('unit7')">💾</button>
-                    <span class="saved-indicator" id="saved_unit7">✓</span>
-                    <div class="variable-info">
-                        1 decimeter = 10 centimeter<br>
-                        1 decameter = 10 meter<br>
-                        1 decigram = 0.1 gram
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName8" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableName8')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName8">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue8" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableValue8')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue8">✓</span>
-                    <input type="text" class="unit-input" id="unit8" placeholder="">
-                    <button class="save-btn" onclick="saveInput('unit8')">💾</button>
-                    <span class="saved-indicator" id="saved_unit8">✓</span>
-                    <div class="variable-info">
-                        1 decagram = 10 gram<br>
-                        1 deciliter = 100 milliliter<br>
-                        1 decaliter = 10 liter
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName9" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableName9')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName9">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue9" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableValue9')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue9">✓</span>
-                    <input type="text" class="unit-input" id="unit9" placeholder="">
-                    <button class="save-btn" onclick="saveInput('unit9')">💾</button>
-                    <span class="saved-indicator" id="saved_unit9">✓</span>
-                    <div class="variable-info">
-                        Avogadro's number (Na): 6.022×10²³ mol⁻¹<br>
-                        Boltzmann constant (k): 1.380649×10⁻²³ m² kg s⁻² K⁻¹<br>
-                        Planck's constant (h): 6.62607015×10⁻³⁴ m² kg / s
-                    </div>
-                </div>
-
-                <div class="variable-input">
-                    <input type="text" class="variable-name-input" id="variableName10" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableName10')">💾</button>
-                    <span class="saved-indicator" id="saved_variableName10">✓</span>
-                    <span style="font-size: 16px; font-weight: bold;">:</span>
-                    <input type="text" class="variable-value-input" id="variableValue10" placeholder="">
-                    <button class="save-btn" onclick="saveInput('variableValue10')">💾</button>
-                    <span class="saved-indicator" id="saved_variableValue10">✓</span>
-                    <input type="text" class="unit-input" id="unit10" placeholder="">
-                    <button class="save-btn" onclick="saveInput('unit10')">💾</button>
-                    <span class="saved-indicator" id="saved_unit10">✓</span>
-                    <div class="variable-info">
-                        Elementary charge (e): 1.60217663×10⁻¹⁹ coulombs<br>
-                        Faraday constant (F): 96,485.3321 sA / mol<br>
-                        The gas constant (R): is 8.314 J / mol·K.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notes Input Field -->
-            <div class="notes-section">
-                <label style="font-size: 14px; font-weight: 600; color: #2c3e50;">Notes:</label>
-                <div id="notesField" class="notes-field" contenteditable="true" placeholder="Write your notes here..."></div>
-                <button class="save-btn notes-save-btn" onclick="saveNotes()">💾 Save Notes</button>
-                <span class="saved-indicator" id="saved_notesField">✓ Saved</span>
-                <div style="font-size: 11px; color: #6c757d; margin-top: 10px; font-style: italic;">
-                    Advanced scientific calculator, All purpose scientific calculator, Excel like calculator
-                </div>
-            </div>
-
-            <div class="app-footer">
-                <div id="unitConverterBtn" style="display: none;">All Unit Converter</div>
-                <div style="margin-top: 10px;">© Math Tool Box Calculator</div>
-            </div>
-        </div>
-        
-        <!-- Right Ad Sidebar (Desktop only) -->
-        <div class="ad-sidebar right-sidebar">
-            <div>Advertisement Space<br>(300x600)</div>
+            <label for="outputField2"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
+            <output id="outputField2">0</output>
         </div>
     </div>
 
-    <!-- Unit Converter Modal -->
+    <!-- Add Calculator Button -->
+    <button id="addCalculatorBtn">Add More Calculators Above</button>
+<br> <font size="2"> List of equations: chemistry, physics, statistics, engineering, economics. (to be updated) </font>
+ <br>
+
+ <font size="2"><b><i>Enter variable names and values with <u><font color="#FF0000">consistent units</font></u></i></b></font>
+    <button onclick="showUnitConverter()" style="margin-left:10px; padding:5px 10px; background:#3498db; color:white; border:none; border-radius:4px; cursor:pointer;">Click for unit converter</button>
+ 
+
+    <!-- Variable Input Fields - FIXED: Added save buttons for variable names -->
+    <div class="variable-input">
+        <input type="text" id="variableName1" placeholder="V">
+        <button class="save-btn" onclick="saveInput('variableName1')">💾</button>
+        <span class="saved-indicator" id="saved_variableName1">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue1" placeholder="value (e.g., 10)">
+        <button class="save-btn" onclick="saveInput('variableValue1')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue1">✓</span>
+        <input type="text" id="unit1" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit1')">💾</button>
+        <span class="saved-indicator" id="saved_unit1">✓</span>
+        <font color="#0000A0">The 7 SI units: Second (s, time), metre (m, length), kilogram (kg, mass),<br>
+            ampere (A, electric current), kelvin (K, thermodynamic temperature),<br> 
+            mole (mol, amount of substance), and candela (cd, luminous intensity).</font>
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName2" placeholder="n">
+        <button class="save-btn" onclick="saveInput('variableName2')">💾</button>
+        <span class="saved-indicator" id="saved_variableName2">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue2" placeholder="value (e.g., 2)">
+        <button class="save-btn" onclick="saveInput('variableValue2')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue2">✓</span>
+        <input type="text" id="unit2" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit2')">💾</button>
+        <span class="saved-indicator" id="saved_unit2">✓</span>
+        1 mile = 1760 yards (1.6093 km) <br>
+        1 yard = 3 feet <br>
+        1 furlong = 220 yard (201.168 meter)
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName3" placeholder="R">
+        <button class="save-btn" onclick="saveInput('variableName3')">💾</button>
+        <span class="saved-indicator" id="saved_variableName3">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue3" placeholder="value (e.g., 8.314)">
+        <button class="save-btn" onclick="saveInput('variableValue3')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue3">✓</span>
+        <input type="text" id="unit3" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit3')">💾</button>
+        <span class="saved-indicator" id="saved_unit3">✓</span>
+        1 foot (feet) = 12 inch <br>
+        1 inch = 2.54 cm <br>
+        1 foot (feet) = 30.48 cm
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName4" placeholder="T">
+        <button class="save-btn" onclick="saveInput('variableName4')">💾</button>
+        <span class="saved-indicator" id="saved_variableName4">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue4" placeholder="value (e.g., 300)">
+        <button class="save-btn" onclick="saveInput('variableValue4')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue4">✓</span>
+        <input type="text" id="unit4" placeholder="unit">
+        <button class="save-btn" onclick="saveInput('unit4')">💾</button>
+        <span class="saved-indicator" id="saved_unit4">✓</span>
+        1 hector = 10000 m2 = 107639.147 sqft <br>
+        1 m2 = 10,7639 sqft. <br>
+        1 hector = 2.471 acre, 1 acre = 43,560 sqft
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName5" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName5')">💾</button>
+        <span class="saved-indicator" id="saved_variableName5">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue5" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue5')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue5">✓</span>
+        <input type="text" id="unit5" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit5')">💾</button>
+        <span class="saved-indicator" id="saved_unit5">✓</span>
+        1 metric ton = 1000 kg <br>
+        1 ton (US) = 2000 pound (907.18 kg) <br>
+        1 pound = 16 ounce
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName6" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName6')">💾</button>
+        <span class="saved-indicator" id="saved_variableName6">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue6" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue6')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue6">✓</span>
+        <input type="text" id="unit6" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit6')">💾</button>
+        <span class="saved-indicator" id="saved_unit6">✓</span>
+        1 pound = 453.592 gm = 0.4536 kg <br>
+        1 ounce = 28.3495 gm <br>
+        1 kg = 2.2046 pound
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName7" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName7')">💾</button>
+        <span class="saved-indicator" id="saved_variableName7">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue7" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue7')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue7">✓</span>
+        <input type="text" id="unit7" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit7')">💾</button>
+        <span class="saved-indicator" id="saved_unit7">✓</span>
+        1 decimeter = 10 centimeter<br>
+        1 decameter = 10 meter<br>
+        1 decigram = 0.1 gram
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName8" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName8')">💾</button>
+        <span class="saved-indicator" id="saved_variableName8">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue8" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue8')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue8">✓</span>
+        <input type="text" id="unit8" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit8')">💾</button>
+        <span class="saved-indicator" id="saved_unit8">✓</span>
+        1 decagram = 10 gram <br>
+        1 deciliter = 100 milliliter <br>
+        1 decaliter = 10 liter
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName9" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName9')">💾</button>
+        <span class="saved-indicator" id="saved_variableName9">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue9" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue9')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue9">✓</span>
+        <input type="text" id="unit9" placeholder=""> 
+        <button class="save-btn" onclick="saveInput('unit9')">💾</button>
+        <span class="saved-indicator" id="saved_unit9">✓</span>
+        Avogadro's number (Na): 6.022*10^23 mol-1 <br>
+        Boltzmann constant (k): 1.380649*10^(-23) m2 kg s-2 K-1 <br>
+        Planck's constant (h):  6.62607015*10^(-34) m2 kg / s
+    </div>
+
+    <div class="variable-input">
+        <input type="text" id="variableName10" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableName10')">💾</button>
+        <span class="saved-indicator" id="saved_variableName10">✓</span>
+        <font size="4">:</font>
+        <input type="text" id="variableValue10" placeholder="">
+        <button class="save-btn" onclick="saveInput('variableValue10')">💾</button>
+        <span class="saved-indicator" id="saved_variableValue10">✓</span>
+         <input type="text" id="unit10" placeholder="">
+         <button class="save-btn" onclick="saveInput('unit10')">💾</button>
+        <span class="saved-indicator" id="saved_unit10">✓</span>
+        Elementary charge (c): 1.60217663*10^(-19) coulombs <br>
+        Faraday constant (F): 96 485.3321  sA / mol <br>
+        The gas constant (R): is 8.314 J / mol·K., to all constants (to be updated)
+    </div>
+
+    <!-- Notes Input Field -->
+    <div class="calculation-group">
+        <label for="notesField">Notes:</label>
+        <div id="notesField" class="notes-field" contenteditable="true" placeholder="Write your notes here..."></div>
+        <button class="save-btn" onclick="saveNotes()" style="margin-top: 5px;">💾 Save Notes</button>
+        <span class="saved-indicator" id="saved_notesField">✓ Saved</span>
+Advanced scientific calculator,
+All purpose scientific calculator,
+Excel like calculator
+    </div>
+
+
+ <div class="units-header">
+        
+        <button id="unitConverterBtn">All Unit Converter</button>
+    </div>
+    <br>
+
+
+ <!-- Unit Converter Modal -->
     <div id="unitConverterModal">
         <div id="unitConverterContent">
             <button id="closeUnitConverter" onclick="closeUnitConverter()">×</button>
-            <div style="font-size: 22px; font-weight: bold; color: #2c3e50; margin-bottom: 25px; text-align: center;">
-                Universal Unit Converter
-            </div>
+            <font size="5"><b>Universal Unit Converter</b></font>
+<br>
+<br>
+<br>
             
             <!-- Length Converter -->
             <div class="converter-section">
@@ -1008,7 +509,7 @@
                             <option value="au">Astronomical Units (AU)</option>
                             <option value="pc">Parsecs (pc)</option>
                         </select>
-                        <button onclick="convertLength()">Convert</button>
+                        <button onclick="convertLength()"><font size="2">Convert</font></button>
                         <span class="result" id="length-result">-</span>
                     </div>
                 </div>
@@ -1053,7 +554,7 @@
                             <option value="ust">US Tons (short ton)</option>
                             <option value="ukt">UK Tons (long ton)</option>
                         </select>
-                        <button onclick="convertWeight()">Convert</button>
+                        <button onclick="convertWeight()"><font size="2">Convert</font></button>
                         <span class="result" id="weight-result">-</span>
                     </div>
                 </div>
@@ -1108,7 +609,7 @@
                             <option value="ft3">Cubic Feet (ft³)</option>
                             <option value="yd3">Cubic Yards (yd³)</option>
                         </select>
-                        <button onclick="convertVolume()">Convert</button>
+                        <button onclick="convertVolume()"><font size="2">Convert</font></button>
                         <span class="result" id="volume-result">-</span>
                     </div>
                 </div>
@@ -1145,7 +646,7 @@
                             <option value="ac">Acres (ac)</option>
                             <option value="mi2">Square Miles (mi²)</option>
                         </select>
-                        <button onclick="convertArea()">Convert</button>
+                        <button onclick="convertArea()"><font size="2">Convert</font></button>
                         <span class="result" id="area-result">-</span>
                     </div>
                 </div>
@@ -1170,7 +671,7 @@
                             <option value="k">Kelvin (K)</option>
                             <option value="r">Rankine (°R)</option>
                         </select>
-                        <button onclick="convertTemperature()">Convert</button>
+                        <button onclick="convertTemperature()"><font size="2">Convert</font></button>
                         <span class="result" id="temp-result">-</span>
                     </div>
                 </div>
@@ -1207,7 +708,7 @@
                             <option value="psi">PSI (lb/in²)</option>
                             <option value="psf">PSF (lb/ft²)</option>
                         </select>
-                        <button onclick="convertPressure()">Convert</button>
+                        <button onclick="convertPressure()"><font size="2">Convert</font></button>
                         <span class="result" id="pressure-result">-</span>
                     </div>
                 </div>
@@ -1252,7 +753,7 @@
                             <option value="cfm">Cubic feet per minute (ft³/min)</option>
                             <option value="cfh">Cubic feet per hour (ft³/h)</option>
                         </select>
-                        <button onclick="convertFlow()">Convert</button>
+                        <button onclick="convertFlow()"><font size="2">Convert</font></button>
                         <span class="result" id="flow-result">-</span>
                     </div>
                 </div>
@@ -1303,7 +804,7 @@
                             <option value="tep">Tonnes of oil equivalent (toe)</option>
                             <option value="tce">Tonnes of coal equivalent (tce)</option>
                         </select>
-                        <button onclick="convertEnergy()">Convert</button>
+                        <button onclick="convertEnergy()"><font size="2">Convert</font></button>
                         <span class="result" id="energy-result">-</span>
                     </div>
                 </div>
@@ -1311,8 +812,7 @@
         </div>
     </div>
 
-    <!-- ALL JAVASCRIPT CODE REMAINS EXACTLY THE SAME AS BEFORE -->
-    <!-- The entire JavaScript section from the previous version is preserved -->
+
     <script>
         // ============================================
         // EXPORT/SAVE FUNCTIONALITY - FIXED VERSION
@@ -1471,25 +971,21 @@
             const calculatorHTML = `
                 <div class="calculation-group">
                     <div class="expression-container">
-                        <label class="calc-label">Calculator:</label>
-                        <input type="text" class="result-input" id="resultField${newCalculatorId}" placeholder="variable name">
-                        <button class="save-btn" onclick="saveInput('resultField${newCalculatorId}')">💾 Save</button>
-                        <span class="saved-indicator" id="saved_resultField${newCalculatorId}">✓ Saved</span>
-                        <input type="text" class="notes-input" placeholder="Notes" id="notesField${newCalculatorId}">
-                        <button class="save-btn" onclick="saveInput('notesField${newCalculatorId}')">💾 Save</button>
-                        <span class="saved-indicator" id="saved_notesField${newCalculatorId}">✓ Saved</span>
+                        <label for="inputField${newCalculatorId}"><font size="3"><b><i>Calculator:</i></b></font></label>
+                        <input type="text" class="result-input" id="resultField${newCalculatorId}" placeholder="Result variable name">
+                        <button class="save-btn" onclick="saveInput('resultField${newCalculatorId}')">💾</button>
+                        <span class="saved-indicator" id="saved_resultField${newCalculatorId}">✓</span>
+                        <input type="text" placeholder="Notes" id="notesField${newCalculatorId}">
+                        <button class="save-btn" onclick="saveInput('notesField${newCalculatorId}')">💾</button>
+                        <span class="saved-indicator" id="saved_notesField${newCalculatorId}">✓</span>
                     </div>
-                    
-                    <div class="calc-input-container">
-                        <input type="text" class="calc-input" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g">
-                        <button class="save-btn" onclick="saveInput('inputField${newCalculatorId}')">💾 Save Expression</button>
+                    <div style="display: flex; align-items: center;">
+                        <input type="text" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a) + b - c + d - e + f + g" style="height: 30px; width: 280px;">
+                        <button class="save-btn" onclick="saveInput('inputField${newCalculatorId}')">💾 Save</button>
                         <span class="saved-indicator" id="saved_inputField${newCalculatorId}">✓ Saved</span>
                     </div>
-                    
-                    <div class="result-container">
-                        <label class="result-label">Result:</label>
-                        <output id="outputField${newCalculatorId}">0</output>
-                    </div>
+                    <label for="outputField${newCalculatorId}"><font size="3" color="#FF0000"><b><i>Result:</i></b></font></label>
+                    <output id="outputField${newCalculatorId}">0</output>
                 </div>
             `;
             
@@ -2041,3 +1537,4 @@ if ("serviceWorker" in navigator) {
     
 </body>
 </html>
+
