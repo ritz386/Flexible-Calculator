@@ -866,11 +866,15 @@
 
     <script>
         // ============================================
-        // EXPORT/SAVE FUNCTIONALITY
+        // FIXED: DYNAMIC CALCULATOR TRACKING SYSTEM
         // ============================================
         
+        // Global objects to track all calculators
         let savedInputs = {};
+        let calculatorCount = 2; // Start with 2 calculators
+        let dynamicCalculators = []; // Track IDs of dynamically added calculators
         
+        // Function to save ANY input field - FIXED VERSION
         function saveInput(fieldId) {
             const element = document.getElementById(fieldId);
             if (element) {
@@ -886,6 +890,7 @@
             }
         }
         
+        // Function to save notes
         function saveNotes() {
             const notesField = document.getElementById('notesField');
             if (notesField) {
@@ -901,108 +906,34 @@
             }
         }
         
-        function downloadAsHTML() {
-            evaluateAllCalculators();
-            
-            const clone = document.documentElement.cloneNode(true);
-            
-            const downloadSection = clone.querySelector('.download-section');
-            if (downloadSection) {
-                downloadSection.remove();
-            }
-            
-            const initScript = `
-            <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(function() {
-                    const savedValues = ${JSON.stringify(savedInputs, null, 2)};
-                    
-                    Object.keys(savedValues).forEach(fieldId => {
-                        const element = document.getElementById(fieldId);
-                        if (element) {
-                            if (fieldId === 'notesField') {
-                                element.innerHTML = savedValues[fieldId];
-                            } else {
-                                element.value = savedValues[fieldId];
-                                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                                    const inputEvent = new Event('input', {
-                                        bubbles: true,
-                                        cancelable: true
-                                    });
-                                    element.dispatchEvent(inputEvent);
-                                }
-                            }
-                        }
-                    });
-                    
-                    setTimeout(function() {
-                        if (typeof evaluateAllCalculators === 'function') {
-                            evaluateAllCalculators();
-                        }
-                        if (typeof updateVariables === 'function') {
-                            updateVariables();
-                        }
-                    }, 100);
-                    
-                }, 100);
-            });
-            <\/script>
-            `;
-            
-            let htmlString = '<!DOCTYPE html>\n' + clone.outerHTML;
-            const bodyEndIndex = htmlString.lastIndexOf('</body>');
-            if (bodyEndIndex !== -1) {
-                htmlString = htmlString.substring(0, bodyEndIndex) + 
-                            initScript + 
-                            htmlString.substring(bodyEndIndex);
-            }
-            
-            const blob = new Blob([htmlString], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
-            a.download = `Calculator-${timestamp}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            const status = document.getElementById('downloadStatus');
-            if (status) {
-                status.textContent = '✓ Downloaded! Works offline.';
-                setTimeout(() => {
-                    status.textContent = '';
-                }, 3000);
-            }
-        }
-        
         // ============================================
-        // CALCULATOR FUNCTIONALITY
+        // FIXED: CREATE CALCULATOR WITH PROPER TRACKING
         // ============================================
         
-        let calculatorCount = 2;
-
         function createCalculator() {
             calculatorCount++;
             const newCalculatorId = calculatorCount;
             
+            // Store this calculator ID for tracking
+            dynamicCalculators.push(newCalculatorId);
+            
+            // Create the calculator HTML
             const calculatorHTML = `
-                <div class="calculation-group">
+                <div class="calculation-group" id="calculator_${newCalculatorId}">
                     <div class="calculator-header">
                         <span class="calculator-label">Calc:</span>
                         <input type="text" class="variable-name-input" id="resultField${newCalculatorId}" placeholder="var">
-                        <button class="save-btn" onclick="saveInput('resultField${newCalculatorId}')">💾</button>
+                        <button class="save-btn" data-field="resultField${newCalculatorId}">💾</button>
                         <span class="saved-indicator" id="saved_resultField${newCalculatorId}">✓</span>
                         <input type="text" class="notes-input" placeholder="Notes" id="notesField${newCalculatorId}">
-                        <button class="save-btn" onclick="saveInput('notesField${newCalculatorId}')">💾</button>
+                        <button class="save-btn" data-field="notesField${newCalculatorId}">💾</button>
                         <span class="saved-indicator" id="saved_notesField${newCalculatorId}">✓</span>
                     </div>
                     
                     <input type="text" class="expression-input" id="inputField${newCalculatorId}" placeholder="e.g., x! + y * sin(z) + log2(a)">
                     
                     <div style="display: flex; align-items: center; margin: 3px 0;">
-                        <button class="save-expr-btn" onclick="saveInput('inputField${newCalculatorId}')">💾 Save</button>
+                        <button class="save-expr-btn" data-field="inputField${newCalculatorId}">💾 Save</button>
                         <span class="saved-indicator" id="saved_inputField${newCalculatorId}">✓ Saved</span>
                     </div>
                     
@@ -1016,12 +947,14 @@
             const container = document.getElementById('calculatorsContainer');
             const newCalculator = document.createElement('div');
             newCalculator.innerHTML = calculatorHTML;
-            container.appendChild(newCalculator);
+            container.appendChild(newCalculator.firstElementChild);
             
+            // Get references to the new elements
             const inputField = document.getElementById(`inputField${newCalculatorId}`);
             const outputField = document.getElementById(`outputField${newCalculatorId}`);
             const resultField = document.getElementById(`resultField${newCalculatorId}`);
             
+            // Add event listeners
             inputField.addEventListener('input', function() {
                 evaluateExpression(inputField.value, outputField, resultField);
             });
@@ -1030,8 +963,220 @@
                 updateVariables();
                 evaluateAllCalculators();
             });
+            
+            // Add click event listeners to save buttons using event delegation
+            const calculatorElement = document.getElementById(`calculator_${newCalculatorId}`);
+            calculatorElement.addEventListener('click', function(e) {
+                if (e.target.classList.contains('save-btn') || e.target.classList.contains('save-expr-btn')) {
+                    const fieldId = e.target.getAttribute('data-field');
+                    if (fieldId) {
+                        saveInput(fieldId);
+                    }
+                }
+            });
+            
+            // Initialize event listeners for the new calculator's inputs
+            const allInputs = calculatorElement.querySelectorAll('input[type="text"]');
+            allInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.id.startsWith('resultField') || this.id.startsWith('inputField')) {
+                        updateVariables();
+                        evaluateAllCalculators();
+                    }
+                });
+            });
+            
+            console.log(`Created calculator ${newCalculatorId}, total: ${calculatorCount}`);
         }
-
+        
+        // ============================================
+        // FIXED: DOWNLOAD FUNCTION WITH DYNAMIC CALCULATORS
+        // ============================================
+        
+        function downloadAsHTML() {
+            // First, ensure all calculations are up to date
+            evaluateAllCalculators();
+            
+            // Create a clone of the current document
+            const clone = document.documentElement.cloneNode(true);
+            
+            // Remove the download section from the clone
+            const downloadSection = clone.querySelector('.download-section');
+            if (downloadSection) {
+                downloadSection.remove();
+            }
+            
+            // Create initialization script that includes ALL calculators
+            const initScript = `
+            <script>
+            // Initialize saved values on load - FIXED VERSION
+            document.addEventListener('DOMContentLoaded', function() {
+                // First, recreate all dynamic calculators
+                const savedValues = ${JSON.stringify(savedInputs, null, 2)};
+                const dynamicCalculators = ${JSON.stringify(dynamicCalculators)};
+                
+                // Track the highest calculator ID
+                let maxCalculatorId = 2; // Start with default 2 calculators
+                
+                // Find all calculator-related fields in saved values
+                Object.keys(savedValues).forEach(fieldId => {
+                    if (fieldId.startsWith('resultField') || fieldId.startsWith('inputField') || 
+                        fieldId.startsWith('notesField') || fieldId.startsWith('outputField')) {
+                        const idNum = parseInt(fieldId.replace(/\\D/g, ''));
+                        if (idNum > maxCalculatorId) {
+                            maxCalculatorId = idNum;
+                        }
+                    }
+                });
+                
+                // Recreate any missing calculators
+                for (let i = 3; i <= maxCalculatorId; i++) {
+                    if (!document.getElementById('calculator_' + i)) {
+                        console.log('Recreating calculator', i);
+                        
+                        // Create calculator HTML
+                        const calculatorHTML = \`
+                            <div class="calculation-group" id="calculator_\${i}">
+                                <div class="calculator-header">
+                                    <span class="calculator-label">Calc:</span>
+                                    <input type="text" class="variable-name-input" id="resultField\${i}" placeholder="var">
+                                    <button class="save-btn" data-field="resultField\${i}">💾</button>
+                                    <span class="saved-indicator" id="saved_resultField\${i}">✓</span>
+                                    <input type="text" class="notes-input" placeholder="Notes" id="notesField\${i}">
+                                    <button class="save-btn" data-field="notesField\${i}">💾</button>
+                                    <span class="saved-indicator" id="saved_notesField\${i}">✓</span>
+                                </div>
+                                
+                                <input type="text" class="expression-input" id="inputField\${i}" placeholder="e.g., x! + y * sin(z) + log2(a)">
+                                
+                                <div style="display: flex; align-items: center; margin: 3px 0;">
+                                    <button class="save-expr-btn" data-field="inputField\${i}">💾 Save</button>
+                                    <span class="saved-indicator" id="saved_inputField\${i}">✓ Saved</span>
+                                </div>
+                                
+                                <div class="result-container">
+                                    <span class="result-label">Result:</span>
+                                    <div class="result-output" id="outputField\${i}">0</div>
+                                </div>
+                            </div>
+                        \`;
+                        
+                        const container = document.getElementById('calculatorsContainer');
+                        const newCalculator = document.createElement('div');
+                        newCalculator.innerHTML = calculatorHTML;
+                        container.appendChild(newCalculator.firstElementChild);
+                        
+                        // Reattach event listeners
+                        const inputField = document.getElementById('inputField' + i);
+                        const outputField = document.getElementById('outputField' + i);
+                        const resultField = document.getElementById('resultField' + i);
+                        
+                        if (inputField && outputField && resultField) {
+                            inputField.addEventListener('input', function() {
+                                if (typeof evaluateExpression === 'function') {
+                                    evaluateExpression(inputField.value, outputField, resultField);
+                                }
+                            });
+                            
+                            resultField.addEventListener('input', function() {
+                                if (typeof updateVariables === 'function') {
+                                    updateVariables();
+                                }
+                                if (typeof evaluateAllCalculators === 'function') {
+                                    evaluateAllCalculators();
+                                }
+                            });
+                        }
+                        
+                        // Add save button listeners
+                        const calculatorElement = document.getElementById('calculator_' + i);
+                        if (calculatorElement) {
+                            calculatorElement.addEventListener('click', function(e) {
+                                if (e.target.classList.contains('save-btn') || e.target.classList.contains('save-expr-btn')) {
+                                    const fieldId = e.target.getAttribute('data-field');
+                                    if (fieldId && typeof saveInput === 'function') {
+                                        saveInput(fieldId);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+                
+                // Now set all saved values after a short delay
+                setTimeout(function() {
+                    Object.keys(savedValues).forEach(fieldId => {
+                        const element = document.getElementById(fieldId);
+                        if (element) {
+                            if (fieldId === 'notesField') {
+                                element.innerHTML = savedValues[fieldId];
+                            } else {
+                                element.value = savedValues[fieldId];
+                                
+                                // Trigger input events for calculation fields
+                                if (fieldId.startsWith('inputField') || fieldId.startsWith('variableValue')) {
+                                    const inputEvent = new Event('input', {
+                                        bubbles: true,
+                                        cancelable: true
+                                    });
+                                    element.dispatchEvent(inputEvent);
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Re-evaluate all calculations
+                    setTimeout(function() {
+                        if (typeof evaluateAllCalculators === 'function') {
+                            evaluateAllCalculators();
+                        }
+                        if (typeof updateVariables === 'function') {
+                            updateVariables();
+                        }
+                    }, 200);
+                    
+                }, 500);
+            });
+            <\/script>
+            `;
+            
+            // Convert clone to HTML string
+            let htmlString = '<!DOCTYPE html>\n' + clone.outerHTML;
+            
+            // Insert initialization script before closing body tag
+            const bodyEndIndex = htmlString.lastIndexOf('</body>');
+            if (bodyEndIndex !== -1) {
+                htmlString = htmlString.substring(0, bodyEndIndex) + 
+                            initScript + 
+                            htmlString.substring(bodyEndIndex);
+            }
+            
+            // Create and download the file
+            const blob = new Blob([htmlString], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+            a.download = `Calculator-${timestamp}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // Show download status
+            const status = document.getElementById('downloadStatus');
+            if (status) {
+                status.textContent = '✓ Downloaded with all calculators!';
+                setTimeout(() => {
+                    status.textContent = '';
+                }, 3000);
+            }
+        }
+        
+        // ============================================
+        // EXISTING CALCULATOR FUNCTIONALITY (UNCHANGED)
+        // ============================================
+        
         document.getElementById('addCalculatorBtn').addEventListener('click', createCalculator);
 
         const variableNameInputs = [
@@ -1212,13 +1357,26 @@
             }
         }
 
-        // Event Listeners
+        // Event Listeners for default calculators
         inputField1.addEventListener('input', function () {
             evaluateExpression(inputField1.value, outputField1, resultField1);
         });
 
         inputField2.addEventListener('input', function () {
             evaluateExpression(inputField2.value, outputField2, resultField2);
+        });
+
+        // Add event listeners for save buttons (default calculators)
+        document.querySelectorAll('.save-btn, .save-expr-btn').forEach(btn => {
+            if (!btn.hasAttribute('onclick')) {
+                btn.addEventListener('click', function() {
+                    // Get the field ID from the previous input element
+                    const fieldId = this.previousElementSibling ? this.previousElementSibling.id : null;
+                    if (fieldId) {
+                        saveInput(fieldId);
+                    }
+                });
+            }
         });
 
         variableValueInputs.forEach(input => {
